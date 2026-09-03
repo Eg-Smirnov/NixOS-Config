@@ -22,6 +22,7 @@
           ./hosts/server/hardware-configuration.nix
           impermanence.nixosModules.impermanence
           sops-nix.nixosModules.sops
+          ./modules/common/system/power.nix
           ./modules/common/system/configuration.nix
           ./modules/common/system/locale.nix
           ./modules/common/users/users.nix
