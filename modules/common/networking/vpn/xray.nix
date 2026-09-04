@@ -22,7 +22,7 @@
       Type = "simple";
 
       ExecStart =
-        "${pkgs.xray}/bin/xray run -config ${config.sops.secrets.vpn_config.path}";
+        "${pkgs.xray}/bin/xray run -format json -config ${config.sops.secrets.vpn_config.path}";
 
       Restart = "on-failure";
       RestartSec = "5s";
