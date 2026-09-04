@@ -21,23 +21,7 @@
   };
 
   # Включаем поддержку постоянного хранилища
-  environment.persistence."/persist" = {
-    hideMounts = true;
-    directories = [
-      "/var/lib"
-      "/etc/NetworkManager/system-connections"
-    ];
-    users.server = {
-      directories = [
-        ".ssh"         # <-- Вот эта строчка сохранит твою папку с ключами
-        ".local/share/keyrings"
-      ];
-      files = [
-        ".bash_history"
-        "/var/lib/sops-nix/key.txt"
-      ];
-    };
-  };
+  
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
