@@ -42,7 +42,8 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   # List services that you want to enable:
-
+  programs.git.enable = true;  
+  
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
