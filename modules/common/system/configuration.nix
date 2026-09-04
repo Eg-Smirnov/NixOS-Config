@@ -10,33 +10,17 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  
-  networking.networkmanager.enable = true;
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Включаем поддержку постоянного хранилища
-  
-
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   # List services that you want to enable:
   programs.git.enable = true;  
+
   
-  # Enable the OpenSSH daemon.
-  services.openssh = {
-    enable = true;
-    settings.PasswordAuthentication = true;
-    ports = [ 22 ];
-  };
-
-  # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
-
   system.stateVersion = "26.05"; # Did you read the comment?
 }

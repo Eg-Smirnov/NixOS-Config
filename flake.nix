@@ -23,6 +23,9 @@
 
           impermanence.nixosModules.impermanence
           sops-nix.nixosModules.sops
+ 
+          ./modules/common/security/sops.nix
+          ./modules/common/security/ssh.nix
 
           ./modules/common/system/power.nix
           ./modules/common/system/configuration.nix
@@ -31,6 +34,7 @@
 
           ./modules/common/networking/networking.nix
           ./modules/common/networking/vpn/xray.nix
+
         ];
       };
     };

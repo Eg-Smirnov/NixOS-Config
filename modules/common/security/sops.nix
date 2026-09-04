@@ -1,7 +1,7 @@
 { config, pkgs, inputs, ... }:
 {
   sops = {
-    defaultSopsFile = ./secrets.yaml;
+    defaultSopsFile = ../../../secrets.yaml;
     age = {
       # Указываем системе, где искать ключ для расшифровки
       keyFile = "/var/lib/sops-nix/key.txt";
