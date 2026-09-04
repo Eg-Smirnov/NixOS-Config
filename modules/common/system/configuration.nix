@@ -7,13 +7,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  # services.xserver.xkb = {
+  #   layout = "us";
+  #   variant = "";
+  # };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
   
   system.stateVersion = "26.05"; # Did you read the comment?
 }
