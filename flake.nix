@@ -35,6 +35,7 @@
           ./modules/common/networking/networking.nix
           ./modules/common/networking/vpn/xray.nix
 
+          ./modules/common/programs/git.nix
         ];
       };
     };
