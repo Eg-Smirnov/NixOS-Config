@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, infrastructure, ... }:
 
 {
   sops.secrets.ssh_private_key = {
@@ -11,7 +11,11 @@
     enable = true;
 
     settings = {
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      PubkeyAuthentication = true;
+
+      AllowUsers = [ "server" ];
     };
 
     ports = [ 22 ];
@@ -24,6 +28,10 @@
         IdentitiesOnly yes
     '';
   };
+
+  users.users.server.openssh.authorizedKeys.keys = [
+    infrastructure.admin.publicKey
+  ];
 
   networking.firewall.allowedTCPPorts = [ 22 ];
 }
