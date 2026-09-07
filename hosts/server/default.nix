@@ -6,6 +6,7 @@
     ../../modules/common/security/ssh.nix
     ../../modules/common/security/known-hosts.nix
 
+    ../../modules/common/system/impermanence.nix
     ../../modules/common/system/power.nix
     ../../modules/common/system/configuration.nix
     ../../modules/common/system/locale.nix
