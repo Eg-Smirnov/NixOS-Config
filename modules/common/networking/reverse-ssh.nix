@@ -2,8 +2,8 @@
 
 {
   sops.secrets.reverse_tunnel_private_key = {
-    owner = "root";
-    group = "root";
+    owner = "server";
+    group = "users";
     mode = "0400";
   };
 
