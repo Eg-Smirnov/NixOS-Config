@@ -19,23 +19,10 @@
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./hosts/server/hardware-configuration.nix
+          ./hosts/server
 
           impermanence.nixosModules.impermanence
           sops-nix.nixosModules.sops
- 
-          ./modules/common/security/sops.nix
-          ./modules/common/security/ssh.nix
-
-          ./modules/common/system/power.nix
-          ./modules/common/system/configuration.nix
-          ./modules/common/system/locale.nix
-          ./modules/common/users/users.nix
-
-          ./modules/common/networking/networking.nix
-          ./modules/common/networking/vpn/xray.nix
-
-          ./modules/common/programs/git.nix
         ];
       };
     };
