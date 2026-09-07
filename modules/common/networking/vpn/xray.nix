@@ -66,6 +66,10 @@
       "xray-vpn.service"
     ];
 
+    partOf = [
+      "xray-vpn.service"
+    ];
+
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
