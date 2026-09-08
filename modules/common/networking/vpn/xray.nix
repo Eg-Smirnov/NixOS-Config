@@ -174,6 +174,25 @@
             dev "$DEFAULT_INTERFACE"
         fi
 
+        # DNS-сервер должен идти напрямую, а не через xray0.
+        if [ -n "$DEFAULT_GATEWAY" ]; then
+          ${pkgs.iproute2}/bin/ip route replace \
+            1.0.0.1/32 \
+            via "$DEFAULT_GATEWAY" \
+            dev "$DEFAULT_INTERFACE"
+        else
+          ${pkgs.iproute2}/bin/ip route replace \
+            1.0.0.1/32 \
+            dev "$DEFAULT_INTERFACE"
+        fi
+
+        # Full tunnel для всего остального IPv4.
+        ${pkgs.iproute2}/bin/ip route replace \
+          0.0.0.0/1 dev xray0
+
+        ${pkgs.iproute2}/bin/ip route replace \
+          128.0.0.0/1 dev xray0
+
         # Full tunnel для всего остального IPv4.
         ${pkgs.iproute2}/bin/ip route replace \
           0.0.0.0/1 dev xray0
@@ -188,6 +207,8 @@
       '';
 
       ExecStop = pkgs.writeShellScript "xray-routing-stop" ''
+        ${pkgs.iproute2}/bin/ip route del 1.0.0.1/32 2>/dev/null || true
+
         ${pkgs.iproute2}/bin/ip route del 0.0.0.0/1 dev xray0 2>/dev/null || true
         ${pkgs.iproute2}/bin/ip route del 128.0.0.0/1 dev xray0 2>/dev/null || true
       '';
