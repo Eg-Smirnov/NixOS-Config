@@ -1,15 +1,7 @@
 { ... }:
 
 {
-  users.groups.media = {};
-
   users.users.qbittorrent.extraGroups = [ "media" ];
-
-  systemd.tmpfiles.rules = [
-    "d /media/downloads 2775 root media -"
-    "d /media/downloads/incomplete 2775 root media -"
-    "d /media/downloads/complete 2775 root media -"
-  ];
 
   services.qbittorrent = {
     enable = true;

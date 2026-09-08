@@ -18,7 +18,9 @@
     ../../modules/common/networking/reverse-ssh.nix
 
     ../../modules/common/programs/git.nix
-
+    
+    ../../modules/server/media.nix
     ../../modules/server/torrent
+    ../../modules/server/arrs/sonarr.nix
   ];
 }
