@@ -20,15 +20,22 @@
       Restart = "on-failure";
       RestartSec = 5;
 
+      DynamicUser = true;
+
+      StateDirectory = "flaresolverr";
+      CacheDirectory = "flaresolverr";
+
       Environment = [
         "LOG_LEVEL=info"
         "HOST=127.0.0.1"
         "PORT=8191"
+
+        "HOME=/var/lib/flaresolverr"
+        "XDG_CACHE_HOME=/var/cache/flaresolverr"
       ];
 
-      DynamicUser = true;
-
       PrivateTmp = true;
+
       ProtectSystem = "strict";
       ProtectHome = true;
     };
