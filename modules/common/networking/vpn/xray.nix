@@ -181,13 +181,6 @@
         ${pkgs.iproute2}/bin/ip route replace \
           128.0.0.0/1 dev xray0
 
-        # Full tunnel для всего остального IPv4.
-        ${pkgs.iproute2}/bin/ip route replace \
-          0.0.0.0/1 dev xray0
-
-        ${pkgs.iproute2}/bin/ip route replace \
-          128.0.0.0/1 dev xray0
-
         echo "Xray routing configured:"
         echo "  LAN: 192.168.0.0/16 -> $DEFAULT_INTERFACE"
         echo "  VPN server: $VPN_SERVER_IP -> $DEFAULT_INTERFACE"
@@ -195,8 +188,6 @@
       '';
 
       ExecStop = pkgs.writeShellScript "xray-routing-stop" ''
-        ${pkgs.iproute2}/bin/ip route del 1.0.0.1/32 2>/dev/null || true
-
         ${pkgs.iproute2}/bin/ip route del 0.0.0.0/1 dev xray0 2>/dev/null || true
         ${pkgs.iproute2}/bin/ip route del 128.0.0.0/1 dev xray0 2>/dev/null || true
       '';
