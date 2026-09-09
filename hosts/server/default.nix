@@ -24,6 +24,7 @@
     ../../modules/server/arrs/sonarr.nix
     ../../modules/server/arrs/radarr.nix
     ../../modules/server/arrs/prowlarr.nix
+    ../../modules/server/arrs/flaresolverr.nix
     
     ../../modules/server/jellyfin
   ];
