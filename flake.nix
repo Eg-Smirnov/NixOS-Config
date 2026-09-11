@@ -42,7 +42,7 @@
         system = "x86_64-linux"; # WSL работает на x86_64
 
         specialArgs = {
-          infrastructure = import ./hosts/server/infrastructure.nix;
+          infrastructure = import ./hosts/wsl/infrastructure.nix;
         };
 
 
