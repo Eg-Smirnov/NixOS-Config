@@ -40,14 +40,19 @@
 
       wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # WSL работает на x86_64
-        #specialArgs = { inherit inputs; }; # Передаем inputs, если нужно
+
+        specialArgs = {
+          infrastructure = import ./hosts/server/infrastructure.nix;
+        };
+
+
         modules = [
           # Указываем путь к вашему новому файлу конфигурации
           nixos-wsl.nixosModules.default
+          impermanence.nixosModules.impermanence
+          sops-nix.nixosModules.sops
 
-          ./hosts/wsl/default.nix
-          # Здесь же можно импортировать общие модули, если они у вас есть
-          # ./modules/common.nix 
+          ./hosts/wsl
         ];
       };
     };
