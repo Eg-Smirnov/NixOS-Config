@@ -1,13 +1,9 @@
 name: NixOS CI
 
+# Automatic CI is disabled while automatic updates are under development.
+# The workflow can still be started manually from GitHub Actions.
 on:
-  push:
-    branches:
-      - master
-
-  pull_request:
-    branches:
-      - master
+  workflow_dispatch:
 
 jobs:
   check:

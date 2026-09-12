@@ -11,7 +11,8 @@
     ../../modules/common/system/configuration.nix
     ../../modules/common/system/locale.nix
 
-    ../../modules/common/auto-update
+    # Disabled while automatic updates are under development.
+    # ../../modules/common/auto-update
 
     ../../modules/common/users/users.nix
 
