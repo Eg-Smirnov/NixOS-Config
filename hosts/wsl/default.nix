@@ -7,20 +7,16 @@
   
   imports = [
 
-    ../../modules/common/security/sops.nix
-    ../../modules/common/security/ssh.nix
-    ../../modules/common/security/known-hosts.nix
-
-    ../../modules/common/system/impermanence.nix
-    ../../modules/common/system/power.nix
-    # ../../modules/common/system/configuration.nix
+    ./sops.nix
+    ./ssh.nix
+    ./known-hosts.nix
+    ./impermanence.nix
     ../../modules/common/system/locale.nix
 
-    ../../modules/common/users/users.nix
-
-    ../../modules/common/networking/networking.nix
-    ../../modules/common/networking/vpn/xray.nix
-    ../../modules/common/networking/reverse-ssh.nix
+    ./users.nix
+    ./networking.nix
+    ../../modules/server/vpn/xray.nix
+    ../../modules/server/reverse-ssh.nix
 
     ../../modules/common/programs/git.nix
 
@@ -32,6 +28,7 @@
     ../../modules/server/arrs/flaresolverr.nix
     
     ../../modules/server/jellyfin
+    ../../modules/server/power.nix
 
   ];
 
