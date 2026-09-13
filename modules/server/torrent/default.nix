@@ -24,4 +24,6 @@
   systemd.services.qbittorrent.unitConfig.RequiresMountsFor = [
     "/media"
   ];
+
+  systemd.services.qbittorrent.serviceConfig.PrivateUsers = false;
 }
