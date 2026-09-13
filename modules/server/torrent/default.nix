@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   users.users.qbittorrent.extraGroups = [ "media" ];
@@ -25,5 +25,5 @@
     "/media"
   ];
 
-  systemd.services.qbittorrent.serviceConfig.PrivateUsers = false;
+  systemd.services.qbittorrent.serviceConfig.PrivateUsers = lib.mkForce false;
 }
