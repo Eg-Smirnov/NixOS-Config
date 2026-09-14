@@ -38,6 +38,14 @@
         ];
       };
 
+      vps1 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          ./hosts/vps1
+        ];
+      };
+
       wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # WSL работает на x86_64
 
