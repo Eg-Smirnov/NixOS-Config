@@ -9,6 +9,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";  # Использует ту же версию nixpkgs
@@ -21,7 +26,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, impermanence, sops-nix, nixos-wsl }: {
+  outputs = { self, nixpkgs, impermanence, disko, sops-nix, nixos-wsl }: {
     nixosConfigurations = {
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -42,6 +47,9 @@
         system = "x86_64-linux";
 
         modules = [
+          disko.nixosModules.disko
+          impermanence.nixosModules.impermanence
+
           ./hosts/vps1
         ];
       };

@@ -3,6 +3,8 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./disko.nix
+    ./impermanence.nix
     ./boot.nix
     ./networking.nix
     ./users.nix
