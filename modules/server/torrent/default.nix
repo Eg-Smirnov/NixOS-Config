@@ -8,17 +8,7 @@
 
     openFirewall = true;
 
-    serverConfig = {
-      LegalNotice.Accepted = true;
-
-      Preferences = {
-        Downloads = {
-          SavePath = "/media/downloads/complete/";
-          TempPath = "/media/downloads/incomplete/";
-          TempPathEnabled = true;
-        };
-      };
-    };
+    extraArgs = [ "--confirm-legal-notice" ];
   };
 
   systemd.services.qbittorrent.unitConfig.RequiresMountsFor = [
