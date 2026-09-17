@@ -5,7 +5,7 @@
     "wifi_psk" = { };
   };
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "home-server";
   networking.networkmanager = {
 	  enable = true;
 	  ensureProfiles = {
