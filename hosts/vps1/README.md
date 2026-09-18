@@ -16,7 +16,7 @@ Before using the host, verify these host-specific items:
 
 ## 3x-ui
 
-`modules/vps/3x-ui.nix` defines a pinned `v3.2.6` container service. Its state
+`modules/vps/3x-ui.nix` defines a pinned `v3.8.5` container service. Its state
 directories are `/var/lib/3x-ui/db` and `/var/lib/3x-ui/cert`.
 
 The 3x-ui restore must use the saved database and any TLS certificates. Keep

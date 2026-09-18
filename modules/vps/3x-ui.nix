@@ -9,8 +9,8 @@ in
 
     image = lib.mkOption {
       type = lib.types.str;
-      default = "ghcr.io/mhsanaei/3x-ui@sha256:82552eab7b8f43eb5346ef75c1004cc68042db1864cbafc4cc0bd0515dea3640";
-      description = "Pinned upstream 3x-ui v3.2.6 amd64 image.";
+      default = "ghcr.io/mhsanaei/3x-ui@sha256:be0af3a71e948bab24852b5dc571fd9835834847f086a84b1c4eb5932dd0fe50";
+      description = "Pinned upstream 3x-ui v3.8.5 amd64 image.";
     };
 
     stateDirectory = lib.mkOption {
