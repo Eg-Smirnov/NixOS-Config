@@ -14,7 +14,7 @@
 
     ./users.nix
     ./networking.nix
-    ../../modules/server/vpn/xray.nix
+    # ../../modules/server/vpn/xray.nix
     ../../modules/server/reverse-ssh.nix
 
     ../../modules/common/programs/git.nix
