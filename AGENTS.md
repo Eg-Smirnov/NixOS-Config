@@ -1,5 +1,11 @@
 # NixOS safety rules
 
+## Working environment
+
+- The server runs NixOS. Local repository work is done on Windows.
+- To access the server, use `ssh hs` only after the confirmation required below.
+- Windows WSL has separate `Ubuntu` and `NixOS` distributions. Always specify the intended distribution with `wsl.exe -d` when using WSL.
+
 ## Default operating mode
 
 - Start with read-only inspection and explain the intended change before editing.
@@ -21,7 +27,7 @@
 
 - Treat `nix build`, `nix flake check`, and evaluation as non-activation checks. They may download dependencies and populate the Nix store; report that beforehand when it is relevant.
 - For a proposed configuration change, prefer evaluation/checks first. Only propose activation after checks succeed and its system effects have been summarized.
-- Treat the full-tunnel Xray routing and its watchdog as connectivity-critical: do not restart or modify them without confirmation.
+- Treat full-tunnel VPN routing and its watchdog (Xray or AmneziaWG) as connectivity-critical: do not restart or modify them without confirmation.
 - Treat media paths as user data. Do not delete, move, chmod recursively, or reconfigure download locations without confirmation.
 
 ## Secrets and review
