@@ -5,7 +5,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # boot.kernelParams = [ "amdgpu.dc=0" ];
+  boot.kernelParams = [ "amdgpu.dc=0" "systemd.mask=tpm2.target" ];
 
   # Configure keymap in X11
   # services.xserver.xkb = {
