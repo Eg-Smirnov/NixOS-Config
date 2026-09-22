@@ -2,10 +2,11 @@
 {
   # Отключаем спячку и гибернацию через современный формат
   systemd.sleep.settings.Sleep = {
-    AllowSuspend = false;
+    AllowSuspend = true;
     AllowHibernation = false;
     AllowSuspendThenHibernate = false;
     AllowHybridSleep = false;
+    MemorySleepMode = "deep";
   };
 
   # Настройки logind через современный формат
@@ -26,5 +27,5 @@
   '';
 
   # Дополнительная защита от засыпания
-  systemd.targets.sleep.enable = false;
+  systemd.targets.sleep.enable = true;
 }

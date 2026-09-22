@@ -28,5 +28,6 @@
     
     ../../modules/server/jellyfin
     ../../modules/server/power.nix
+    ../../modules/server/night-sleep.nix
   ];
 }

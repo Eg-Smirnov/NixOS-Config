@@ -16,4 +16,5 @@
   ];
 
   systemd.services.qbittorrent.serviceConfig.PrivateUsers = lib.mkForce false;
+  systemd.services.qbittorrent.serviceConfig.PrivateDevices = lib.mkForce false;
 }

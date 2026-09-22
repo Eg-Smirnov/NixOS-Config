@@ -4,7 +4,7 @@
 
 - The server runs NixOS. Local repository work is done on Windows.
 - To access the server, use `ssh hs` only after the confirmation required below.
-- Windows WSL has separate `Ubuntu` and `NixOS` distributions. Always specify the intended distribution with `wsl.exe -d` when using WSL.
+- Windows WSL has separate `Ubuntu` and `NixOS` distributions, but currently only `Ubuntu` works. Use `wsl.exe -d Ubuntu` for local WSL checks and do not attempt to use the non-working `NixOS` distribution.
 
 ## Default operating mode
 
