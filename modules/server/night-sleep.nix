@@ -4,10 +4,17 @@ let
   checkJellyfinAndSuspend = pkgs.writeShellApplication {
     name = "check-jellyfin-and-suspend";
     runtimeInputs = [
+      pkgs.coreutils
       pkgs.python3
       pkgs.systemd
     ];
     text = ''
+      current_time="$(date +%H%M)"
+      if (( 10#$current_time >= 830 )); then
+        echo "The night sleep window has ended; keeping the server awake"
+        exit 0
+      fi
+
       if ! python3 - "${config.sops.secrets.jellyfin_api_sleep.path}" <<'PY'
       import json
       import pathlib
@@ -67,7 +74,7 @@ in
     timerConfig = {
       OnCalendar = [
         "*-*-* 00..07:00/5:00"
-        "*-*-* 08:00,05,10,15,20,25:00"
+        "*-*-* 08:00,05,10,15,20:00"
       ];
       AccuracySec = "30s";
     };
