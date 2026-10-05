@@ -15,7 +15,6 @@
     ./users.nix
     ./networking.nix
     ../../modules/server/vpn/amneziawg.nix
-    ../../modules/server/reverse-ssh.nix
 
     ../../modules/common/programs/git.nix
 

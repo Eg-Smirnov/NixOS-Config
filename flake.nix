@@ -54,6 +54,16 @@
         ];
       };
 
+      vps2 = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+
+        modules = [
+          impermanence.nixosModules.impermanence
+
+          ./hosts/vps2
+        ];
+      };
+
       wsl = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux"; # WSL работает на x86_64
 
