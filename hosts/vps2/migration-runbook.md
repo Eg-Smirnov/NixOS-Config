@@ -64,16 +64,18 @@ unattended. Use the provider console to set a unique username, strong password,
 and long non-default web path before the brief public setup window.
 
 Create one VLESS REALITY inbound on `443/TCP` for traffic arriving from VPS1.
-After it works directly:
+After configuring the panel to use `3452/TCP`:
 
-1. Replace `2053` with `443` in `networking.firewall.allowedTCPPorts`.
+1. Replace `2053` with `443` and `3452` in
+   `networking.firewall.allowedTCPPorts`.
 2. Build and activate the final VPS2 configuration after explicit confirmation.
-3. Confirm that the panel is no longer reachable publicly.
+3. Confirm that the panel is reachable on `3452/TCP` and no longer reachable
+   on `2053/TCP`.
 4. Change VPS1 to use the new endpoint only in a separate, confirmed cutover.
 
 ## Acceptance checks
 
-- Only `22/TCP` and, after bootstrap, `443/TCP` are reachable publicly.
+- Only `22/TCP`, `443/TCP`, and the panel on `3452/TCP` are reachable publicly.
 - 3x-ui and its SQLite database survive two reboots.
 - At least 1 GiB remains free after the 3x-ui image is present.
 - Nix GC, journal limits, and Podman image pruning are enabled.

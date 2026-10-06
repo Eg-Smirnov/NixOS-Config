@@ -22,11 +22,11 @@
   networking.firewall = {
     enable = true;
 
-    # Port 2053 is temporary. Remove it immediately after the initial 3x-ui
-    # setup; the final public cascade endpoint is 443/TCP.
+    # 443/TCP is the public cascade endpoint. The 3x-ui panel uses 3452/TCP.
     allowedTCPPorts = [
       22
-      2053
+      443
+      3452
     ];
   };
 }
