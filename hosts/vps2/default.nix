@@ -10,6 +10,7 @@
     ./users.nix
     ./ssh.nix
     ./maintenance.nix
+    ../../modules/common/programs/git.nix
     ../../modules/vps/private-secrets.nix
     ../../modules/vps/3x-ui.nix
   ];
