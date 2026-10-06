@@ -19,6 +19,11 @@
       inputs.nixpkgs.follows = "nixpkgs";  # Использует ту же версию nixpkgs
     };
 
+    secrets = {
+      url = "git+ssh://git@github.com/Eg-Smirnov/NixOS-Secrets.git";
+      flake = false;
+    };
+
     nixos-wsl = {
       url = "github:nix-community/NixOS-WSL";
       # Следуем за вашим nixpkgs, чтобы версии были согласованы
@@ -26,13 +31,14 @@
     };
   };
 
-  outputs = { self, nixpkgs, impermanence, disko, sops-nix, nixos-wsl }: {
+  outputs = { self, nixpkgs, impermanence, disko, sops-nix, secrets, nixos-wsl }: {
     nixosConfigurations = {
       server = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
         specialArgs = {
           infrastructure = import ./hosts/server/infrastructure.nix;
+          inherit secrets;
         };
         
         modules = [
@@ -46,9 +52,12 @@
       vps1 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
+        specialArgs = { inherit secrets; };
+
         modules = [
           disko.nixosModules.disko
           impermanence.nixosModules.impermanence
+          sops-nix.nixosModules.sops
 
           ./hosts/vps1
         ];
@@ -57,8 +66,11 @@
       vps2 = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
 
+        specialArgs = { inherit secrets; };
+
         modules = [
           impermanence.nixosModules.impermanence
+          sops-nix.nixosModules.sops
 
           ./hosts/vps2
         ];

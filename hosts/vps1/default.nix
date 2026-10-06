@@ -7,8 +7,10 @@
     ./impermanence.nix
     ./boot.nix
     ./networking.nix
+    ./wireguard.nix
     ./users.nix
     ./ssh.nix
+    ../../modules/vps/private-secrets.nix
     ../../modules/vps/3x-ui.nix
   ];
 

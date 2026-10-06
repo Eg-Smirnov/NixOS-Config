@@ -121,7 +121,22 @@
         "impermanence": "impermanence",
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
+        "secrets": "secrets",
         "sops-nix": "sops-nix"
+      }
+    },
+    "secrets": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1791309520,
+        "narHash": "sha256-ScwXHPCJ0irpNAHwM8d/+rIJRWHD6eu//uNS2wXh/dg=",
+        "rev": "715e9593703ceea78fde066a7c0d32d82e1886bd",
+        "type": "git",
+        "url": "ssh://git@github.com/Eg-Smirnov/NixOS-Secrets.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "ssh://git@github.com/Eg-Smirnov/NixOS-Secrets.git"
       }
     },
     "sops-nix": {
