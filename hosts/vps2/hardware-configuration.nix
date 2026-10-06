@@ -22,6 +22,12 @@
     options = [ "subvol=root" "compress=zstd" "noatime" ];
   };
 
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/boot";
+    fsType = "ext4";
+    options = [ "noatime" ];
+  };
+
   fileSystems."/nix" = {
     device = "/dev/disk/by-label/nixos";
     fsType = "btrfs";

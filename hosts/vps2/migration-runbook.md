@@ -34,12 +34,14 @@ manually after confirming `/dev/vda` is the intended destructive target:
 
 1. A 1 MiB BIOS boot partition with the `bios_grub` flag.
 2. A 1 GiB swap partition labelled `swap`.
-3. A Btrfs partition using all remaining space, labelled `nixos`.
+3. A 256 MiB ext4 partition labelled `boot`, mounted at `/boot`.
+4. A Btrfs partition using all remaining space, labelled `nixos`.
 
 Create the Btrfs subvolumes `root`, `nix`, and `persist`. Mount `root` at
 `/mnt`, then mount `nix` and `persist` at their matching paths with
-`compress=zstd` and `noatime`. Enable the labelled swap before installation so
-the 709 MiB VM has enough memory headroom.
+`compress=zstd` and `noatime`. Mount the ext4 filesystem at `/mnt/boot`. Enable
+the labelled swap before installation so the 709 MiB VM has enough memory
+headroom.
 
 ## Installation
 
