@@ -13,7 +13,8 @@ new Btrfs `block-group-tree` format. The root filesystem is ephemeral. `/nix`,
 `/persist`, the 3x-ui state, Podman storage, system identity, host keys, and
 bounded logs persist across reboots.
 
-The public VLESS REALITY endpoint uses `443/TCP`. The configured 3x-ui panel
-uses `3452/TCP`; its initial `2053/TCP` bootstrap port is closed.
+The public VLESS REALITY endpoint permits `443/TCP` and `443/UDP`; UDP supports
+transports that use HTTP/3/QUIC. The configured 3x-ui panel uses `3452/TCP`;
+its initial `2053/TCP` bootstrap port is closed.
 
 See `migration-runbook.md` before changing the VPS.

@@ -75,7 +75,8 @@ After configuring the panel to use `3452/TCP`:
 
 ## Acceptance checks
 
-- Only `22/TCP`, `443/TCP`, and the panel on `3452/TCP` are reachable publicly.
+- Only `22/TCP`, `443/TCP`, `443/UDP`, and the panel on `3452/TCP` are
+  reachable publicly.
 - 3x-ui and its SQLite database survive two reboots.
 - At least 1 GiB remains free after the 3x-ui image is present.
 - Nix GC, journal limits, and Podman image pruning are enabled.
