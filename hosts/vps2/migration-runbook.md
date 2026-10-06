@@ -9,7 +9,8 @@ has booted twice with working networking and administrative access.
 - Disk: `/dev/vda`, 5 GiB.
 - Firmware: legacy BIOS.
 - Memory: 709 MiB RAM; Ubuntu currently has 767 MiB swap.
-- Interface: `eth0`.
+- Ubuntu interface: `eth0`; the NixOS installer uses `ens3`, which is also the
+  interface configured for the installed system.
 - IPv4: `104.128.142.208/24`.
 - Gateway: `104.128.142.1`.
 - DNS: `8.8.8.8`.

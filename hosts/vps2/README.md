@@ -1,7 +1,7 @@
 # VPS2
 
 `vps2` is the second node of the VPN cascade. It uses the static IPv4 address
-`104.128.142.208/24` on `eth0`, with gateway `104.128.142.1` and DNS server
+`104.128.142.208/24` on `ens3`, with gateway `104.128.142.1` and DNS server
 `8.8.8.8`.
 
 The provider VM has a 5 GiB `/dev/vda` disk, 709 MiB RAM, legacy BIOS boot,

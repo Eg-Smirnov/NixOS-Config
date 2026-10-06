@@ -3,7 +3,7 @@
 {
   networking.useDHCP = false;
 
-  networking.interfaces.eth0 = {
+  networking.interfaces.ens3 = {
     useDHCP = false;
     ipv4.addresses = [
       {
@@ -15,7 +15,7 @@
 
   networking.defaultGateway = {
     address = "104.128.142.1";
-    interface = "eth0";
+    interface = "ens3";
   };
   networking.nameservers = [ "8.8.8.8" ];
 
