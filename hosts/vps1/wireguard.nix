@@ -13,9 +13,4 @@
       }
     ];
   };
-
-  systemd.services."wireguard-wg-cascade" = {
-    requires = [ "sops-nix.service" ];
-    after = [ "sops-nix.service" ];
-  };
 }
