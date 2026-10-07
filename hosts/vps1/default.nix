@@ -23,6 +23,7 @@
   services.xserver.enable = false;
 
   services.threeXui.enable = true;
+  services.threeXui.enableFail2ban = true;
 
   system.stateVersion = "26.05";
 }
