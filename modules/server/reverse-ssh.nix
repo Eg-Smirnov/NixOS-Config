@@ -1,5 +1,8 @@
 { config, pkgs, infrastructure, ... }:
 
+let
+  media = infrastructure.vps.mediaGateway.services;
+in
 {
   sops.secrets.reverse_tunnel_private_key = {
     owner = "server";
@@ -44,6 +47,54 @@
       RestartSec = "10s";
 
       # Туннелю не нужны никакие привилегии.
+      User = "server";
+      Group = "users";
+
+      NoNewPrivileges = true;
+      PrivateTmp = true;
+    };
+  };
+
+  systemd.services.reverse-media-ssh = {
+    description = "Reverse SSH tunnels for media services to VPS";
+
+    wantedBy = [ "multi-user.target" ];
+
+    after = [
+      "network-online.target"
+      "sops-nix.service"
+    ];
+
+    wants = [
+      "network-online.target"
+    ];
+
+    serviceConfig = {
+      Type = "simple";
+
+      ExecStart = pkgs.writeShellScript "reverse-media-ssh" ''
+        exec ${pkgs.openssh}/bin/ssh \
+          -N \
+          -T \
+          -o ExitOnForwardFailure=yes \
+          -o ServerAliveInterval=30 \
+          -o ServerAliveCountMax=3 \
+          -o StrictHostKeyChecking=yes \
+          -o UserKnownHostsFile=/etc/ssh/ssh_known_hosts \
+          -o IdentityFile=${config.sops.secrets.reverse_tunnel_private_key.path} \
+          -o IdentitiesOnly=yes \
+          -R 127.0.0.1:${toString media.jellyfin.remotePort}:127.0.0.1:${toString media.jellyfin.localPort} \
+          -R 127.0.0.1:${toString media.sonarr.remotePort}:127.0.0.1:${toString media.sonarr.localPort} \
+          -R 127.0.0.1:${toString media.radarr.remotePort}:127.0.0.1:${toString media.radarr.localPort} \
+          -R 127.0.0.1:${toString media.prowlarr.remotePort}:127.0.0.1:${toString media.prowlarr.localPort} \
+          -R 127.0.0.1:${toString media.qbittorrent.remotePort}:127.0.0.1:${toString media.qbittorrent.localPort} \
+          -p ${toString infrastructure.vps.sshPort} \
+          ${infrastructure.vps.reverseTunnel.user}@${infrastructure.vps.address}
+      '';
+
+      Restart = "always";
+      RestartSec = "10s";
+
       User = "server";
       Group = "users";
 
