@@ -64,7 +64,7 @@ let
 
   arrOpen = pkgs.writeShellApplication {
     name = "arr-open";
-    runtimeInputs = [ pkgs.coreutils pkgs.python3 pkgs.sudo pkgs.systemd ];
+    runtimeInputs = [ pkgs.coreutils pkgs.python3 pkgs.systemd ];
     text = ''
       if [ "$(id -u)" -ne 0 ]; then
         if [ -z "''${SSH_CONNECTION:-}" ]; then
@@ -72,7 +72,7 @@ let
           exit 2
         fi
         source_ip="$(printf '%s\n' "$SSH_CONNECTION" | cut -d ' ' -f 1)"
-        exec sudo "$0" "$source_ip"
+        exec /run/wrappers/bin/sudo "$0" "$source_ip"
       fi
 
       if [ "$#" -ne 1 ]; then
@@ -111,10 +111,10 @@ let
 
   arrClose = pkgs.writeShellApplication {
     name = "arr-close";
-    runtimeInputs = [ pkgs.coreutils pkgs.sudo pkgs.systemd ];
+    runtimeInputs = [ pkgs.coreutils pkgs.systemd ];
     text = ''
       if [ "$(id -u)" -ne 0 ]; then
-        exec sudo "$0"
+        exec /run/wrappers/bin/sudo "$0"
       fi
 
       systemctl stop arr-access-expire.timer
