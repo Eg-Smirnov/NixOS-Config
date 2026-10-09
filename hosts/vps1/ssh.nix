@@ -45,6 +45,7 @@ in
 
   users.users.server.openssh.authorizedKeys.keys = [
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGFbguy5Xd0uBsN7azv2O4AmjWHUebZz8EbVVwm3Me8n egor@Egors-laptop"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFl12Pmt/WgxuShZMASShnArE/epMQe8DkZlIYtINFiF u0_a265@localhost"
   ];
 
   users.users.reverse-tunnel.openssh.authorizedKeys.keys = [
