@@ -8,6 +8,11 @@ let
   allowlistPath = "${stateDirectory}/nginx-allow.conf";
   sourceIpPath = "${stateDirectory}/source-ip";
 
+  permanentSourceIps = [
+    "104.128.142.208"
+  ];
+  permanentAllowDirectives = lib.concatMapStringsSep "\n" (ip: "allow ${ip};") permanentSourceIps;
+
   unavailableLocation = {
     extraConfig = ''
       internal;
@@ -56,7 +61,7 @@ let
     set -eu
     install -d -m 0755 ${stateDirectory}
     temporary="$(${pkgs.coreutils}/bin/mktemp ${stateDirectory}/nginx-allow.XXXXXX)"
-    printf '%s\n' 'deny all;' > "$temporary"
+    printf '%s\n' ${lib.escapeShellArg permanentAllowDirectives} 'deny all;' > "$temporary"
     chmod 0644 "$temporary"
     mv -f "$temporary" ${allowlistPath}
     rm -f ${sourceIpPath}
@@ -90,7 +95,7 @@ let
 
       install -d -m 0755 ${stateDirectory}
       temporary="$(mktemp ${stateDirectory}/nginx-allow.XXXXXX)"
-      printf 'allow %s;\ndeny all;\n' "$source_ip" > "$temporary"
+      printf '%s\nallow %s;\ndeny all;\n' ${lib.escapeShellArg permanentAllowDirectives} "$source_ip" > "$temporary"
       chmod 0644 "$temporary"
       mv -f "$temporary" ${allowlistPath}
       printf '%s\n' "$source_ip" > ${sourceIpPath}
