@@ -4,3 +4,5 @@ result-*
 server_key
 *.sublime-project
 *.sublime-workspace
+/plot_thermal.py
+/thermal-report.svg
