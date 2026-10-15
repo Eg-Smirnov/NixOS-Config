@@ -6,3 +6,4 @@ server_key
 *.sublime-workspace
 /plot_thermal.py
 /thermal-report.svg
+/thermal-observation/
