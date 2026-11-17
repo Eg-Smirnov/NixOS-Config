@@ -22,13 +22,7 @@
   networking.firewall = {
     enable = true;
 
-    # 443/TCP and 443/UDP are public cascade endpoints. The 3x-ui panel uses
-    # 3452/TCP.
-    allowedTCPPorts = [
-      22
-      443
-      3452
-    ];
-    allowedUDPPorts = [ 443 ];
+    allowedTCPPorts = [ 22 ];
+    allowedUDPPorts = [ 30326 ];
   };
 }

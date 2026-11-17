@@ -7,3 +7,6 @@ server_key
 /plot_thermal.py
 /thermal-report.svg
 /thermal-observation/
+/awg-vps1-entry-private-key.txt
+/awg-vps1-uplink-private-key.txt
+/awg-vps2-exit-private-key.txt

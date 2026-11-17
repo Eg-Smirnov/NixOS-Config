@@ -12,7 +12,6 @@
     ./maintenance.nix
     ../../modules/common/programs/git.nix
     ../../modules/vps/private-secrets.nix
-    ../../modules/vps/3x-ui.nix
   ];
 
   networking.hostName = "vps2";
@@ -21,8 +20,5 @@
   nixpkgs.config.allowUnfree = true;
 
   services.xserver.enable = false;
-  services.threeXui.enable = true;
-  services.threeXui.enableFail2ban = true;
-
   system.stateVersion = "26.05";
 }

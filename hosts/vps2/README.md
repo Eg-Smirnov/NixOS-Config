@@ -13,8 +13,9 @@ new Btrfs `block-group-tree` format. The root filesystem is ephemeral. `/nix`,
 `/persist`, the 3x-ui state, Podman storage, system identity, host keys, and
 bounded logs persist across reboots.
 
-The public VLESS REALITY endpoint permits `443/TCP` and `443/UDP`; UDP supports
-transports that use HTTP/3/QUIC. The configured 3x-ui panel uses `3452/TCP`;
-its initial `2053/TCP` bootstrap port is closed.
+VPS2 is the AWG egress node in the cascade. It accepts the VPS1 uplink on UDP
+`30326` and performs NAT to `ens3`. Public TCP access is limited to SSH on
+port `22`; the former 3x-ui endpoints and panel are disabled. The old
+`/var/lib/3x-ui` data remains persisted for rollback.
 
 See `migration-runbook.md` before changing the VPS.

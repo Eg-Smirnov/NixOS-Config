@@ -1,5 +1,9 @@
 # VPS2 NixOS migration runbook
 
+> Historical installation record. The 3x-ui bootstrap procedure below is
+> superseded by the active AmneziaWG configuration; do not use it for current
+> VPN changes.
+
 This runbook replaces the broken Ubuntu installation on VPS2 with NixOS. There
 is no data to restore. The provider console must remain available until NixOS
 has booted twice with working networking and administrative access.

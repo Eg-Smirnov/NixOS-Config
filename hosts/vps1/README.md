@@ -1,23 +1,39 @@
-# vps1 migration scaffold
+# VPS1
 
 `vps1` is the NixOS target for `103.71.20.103`, the entry node of the VPN
-cascade. The host is registered in `flake.nix`, but
-`hardware-configuration.nix` is still a placeholder and must be replaced with
-the file generated on the VPS before the first real activation.
+cascade. Its NixOS configuration is registered in `flake.nix`; the home-server
+reverse SSH tunnel and media gateway remain on this VPS.
 
-Before using the host, verify these host-specific items:
+## VPN
 
-- `hardware-configuration.nix`, generated on the VPS during NixOS install;
-- confirmation that the static network and firewall values in `networking.nix`
-  match the provider;
-- the public key for the restricted reverse-tunnel account, if that tunnel is
-  moved from the second VPS;
-- persistent storage policy for `/var/lib/3x-ui`.
+VPS1 accepts fresh AmneziaWG peers on UDP `30326`. Its `awg-uplink` interface
+carries only client-subnet traffic to VPS2; policy routing keeps VPS1's own
+management and media traffic on the public interface. A persistent blackhole
+route prevents client traffic from falling back to the public interface if the
+uplink interface disappears.
 
-## 3x-ui
+Peer public keys and tunnel parameters are declared in Nix. The private keys
+are supplied through SOPS. Add client peers manually to `wireguard.nix` and
+issue their profiles out of band. The fresh client profile uses endpoint
+`103.71.20.103:30326`, server public key
+`9FhghHiEk1Ew1yZFo+5jAChoiiZU0srXTL2PmZeLZSg=`, and `AllowedIPs =
+0.0.0.0/0`. Assign client addresses from `10.201.0.2/32` upward. Match these
+AmneziaWG interface options in each client profile:
 
-`modules/vps/3x-ui.nix` defines a pinned `v3.8.5` container service. Its state
-directories are `/var/lib/3x-ui/db` and `/var/lib/3x-ui/cert`.
+```ini
+Jc = 4
+Jmin = 40
+Jmax = 70
+S1 = 15
+S2 = 25
+H1 = 173829456
+H2 = 285374619
+H3 = 396485721
+H4 = 508596832
+```
 
-The 3x-ui restore must use the saved database and any TLS certificates. Keep
-the backup outside this repository and do not add its contents to Git.
+Keep generated client profiles out of Git and distribute them privately.
+Disable or block IPv6 on each client so it cannot bypass the IPv4 tunnel.
+
+3x-ui has been removed from the active configuration. Its persisted data is
+left on disk for rollback and is not mounted by any active service.

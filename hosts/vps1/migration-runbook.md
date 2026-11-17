@@ -1,5 +1,9 @@
 # vps1 NixOS migration runbook
 
+> Historical migration and 3x-ui restore record. The active configuration now
+> replaces 3x-ui with AmneziaWG; do not follow the restore procedure below for
+> current VPN changes.
+
 This runbook is for migrating VPS1 (`103.71.20.103`) from Ubuntu to NixOS and
 restoring 3x-ui `v3.2.6`. It assumes the provider snapshot and the two local
 3x-ui backups already exist.
