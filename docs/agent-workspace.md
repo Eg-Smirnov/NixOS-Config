@@ -7,6 +7,7 @@
 - Пользователь `agent` состоит только в своей группе `agent`; он не входит в `wheel` или `networkmanager`.
 - Домашний каталог: `/persist/home/agent`, владелец `agent:agent`, режим `0700`. Данные сохраняются на разделе `/persist`.
 - Интерактивный вход от `server` в `agent`, создание `repos` и `worktrees`, запуск Codex и подключение к tmux проверены владельцем сервера.
+- Clone NixOS-Config находится в `~/repos/NixOS-Config`; тестовый worktree — `~/worktrees/NixOS-Config-stage1-smoke`, ветка `codex/stage1-smoke` отслеживает `origin/master`. Владелец подтвердил чистое Git-состояние.
 - NixOS-конфигурация собрана, но не активируется из Codex. Применять системную конфигурацию может только администратор.
 
 ## Подключение и tmux
@@ -41,7 +42,14 @@ tmux attach -t agent-work
 ~/worktrees/   отдельные рабочие деревья задач
 ```
 
-Для нового проекта выберите его URL и имя, затем выполните команды от `agent`:
+Проверенный clone и тестовый worktree:
+
+```text
+~/repos/NixOS-Config
+~/worktrees/NixOS-Config-stage1-smoke  (ветка codex/stage1-smoke → origin/master)
+```
+
+Для другого проекта выберите его URL и имя, затем выполните команды от `agent`:
 
 ```sh
 git clone <repository-url> "$HOME/repos/<project>"
@@ -52,7 +60,7 @@ cd "$HOME/worktrees/<project>-<task>"
 codex
 ```
 
-Замените значения в угловых скобках. В `origin/<base-branch>` укажите существующую удалённую базовую ветку, например `origin/main` или `origin/master`. Команда clone в этой инструкции — шаблон: конкретный репозиторий выбирает владелец; на сервере отдельный clone NixOS-Config не создавался.
+Замените значения в угловых скобках. В `origin/<base-branch>` укажите существующую удалённую базовую ветку, например `origin/main` или `origin/master`. Workflow clone и создания worktree проверен на публичном NixOS-Config; URL других репозиториев выбирает владелец.
 
 Список рабочих деревьев можно посмотреть так:
 
@@ -86,7 +94,7 @@ git --version
 - Codex работает как `agent`, без `sudo`, членства в административных группах и доступа к сокетам Docker/Podman.
 - Домашний каталог `server`, его SSH credentials и SOPS age-ключи не предоставлены `agent`.
 - Не запускайте от `agent` команды активации NixOS. Проверку конфигурации и системную активацию выполняет администратор отдельно.
-- Отдельный clone NixOS-Config не создавался. Его flake содержит private input; отсутствие у `agent` ключа доступа к этому input намеренно.
+- Clone NixOS-Config загружен по HTTPS. Его flake ссылается на private input; у `agent` нет ключа доступа к нему. Не запускайте от `agent` проверку полной flake-конфигурации без отдельного решения администратора.
 
 ## Диагностика
 
@@ -94,4 +102,4 @@ git --version
 - **Не удаётся войти в `agent`:** выполняйте `sudo -iu agent` в интерактивном терминале; `sudo` может запросить пароль пользователя `server`.
 - **tmux не находит сессию:** убедитесь, что команда выполняется как `agent`; создайте её командой `tmux new -As agent-work`.
 - **Codex просит авторизацию:** завершите sign-in flow как `agent`. Не переносите файлы авторизации между учётными записями.
-- **Нет проекта:** сначала выберите URL репозитория и создайте clone в `~/repos`; не используйте `/home/server/NixOS-Config` напрямую.
+- **Нет проекта:** используйте clone в `~/repos` или создайте новый по разделу Git worktrees; не используйте `/home/server/NixOS-Config` напрямую.
