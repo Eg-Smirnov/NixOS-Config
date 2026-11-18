@@ -22,6 +22,14 @@ in
       listenPort = 30326;
       privateKeyFile = config.sops.secrets.awg_entry_private_key.path;
       extraOptions = awgOptions;
+
+      peers = [
+        {
+          name = "phone";
+          publicKey = "2fT52zXGoJPXeeme54h4pG2o3s7fkkZcXbvtFDyklww=";
+          allowedIPs = [ "10.201.0.2/32" ];
+        }
+      ];
     };
 
     awg-uplink = {
