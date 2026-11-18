@@ -1,0 +1,40 @@
+{
+  "server": {
+    "public_endpoint": "103.71.20.103",
+    "listen_port": 30326,
+    "public_key": "9FhghHiEk1Ew1yZFo+5jAChoiiZU0srXTL2PmZeLZSg=",
+    "server_address": "10.201.0.1/24",
+    "client_subnet": "10.201.0.0/24",
+    "dns": [
+      "1.1.1.1"
+    ],
+    "allowed_ips": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "persistent_keepalive": 25,
+    "awg_options": {
+      "Jc": 4,
+      "Jmin": 40,
+      "Jmax": 70,
+      "S1": 15,
+      "S2": 25,
+      "H1": 173829456,
+      "H2": 285374619,
+      "H3": 396485721,
+      "H4": 508596832
+    }
+  },
+  "clients": [
+    {
+      "name": "phone",
+      "public_key": "2fT52zXGoJPXeeme54h4pG2o3s7fkkZcXbvtFDyklww=",
+      "address": "10.201.0.2/32"
+    },
+    {
+      "name": "laptop",
+      "public_key": "8htgEIT4/V57dFkXtKT+OYgn8HJa/F0it4n76srvDig=",
+      "address": "10.201.0.3/32"
+    }
+  ]
+}

@@ -1,35 +1,27 @@
 { config, pkgs, ... }:
 
 let
-  awgOptions = {
-    Jc = 4;
-    Jmin = 40;
-    Jmax = 70;
-    S1 = 15;
-    S2 = 25;
-    H1 = 173829456;
-    H2 = 285374619;
-    H3 = 396485721;
-    H4 = 508596832;
-  };
+  awgClients = builtins.fromJSON (builtins.readFile ./awg-clients.json);
+  awgServer = awgClients.server;
+  awgOptions = awgServer.awg_options;
+  entryPeers = map
+    (client: {
+      name = client.name;
+      publicKey = client.public_key;
+      allowedIPs = [ client.address ];
+    })
+    awgClients.clients;
 in
 
 {
   networking.wireguard.interfaces = {
     awg-entry = {
       type = "amneziawg";
-      ips = [ "10.201.0.1/24" ];
-      listenPort = 30326;
+      ips = [ awgServer.server_address ];
+      listenPort = awgServer.listen_port;
       privateKeyFile = config.sops.secrets.awg_entry_private_key.path;
       extraOptions = awgOptions;
-
-      peers = [
-        {
-          name = "phone";
-          publicKey = "2fT52zXGoJPXeeme54h4pG2o3s7fkkZcXbvtFDyklww=";
-          allowedIPs = [ "10.201.0.2/32" ];
-        }
-      ];
+      peers = entryPeers;
     };
 
     awg-uplink = {

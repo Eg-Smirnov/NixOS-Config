@@ -12,13 +12,32 @@ management and media traffic on the public interface. A persistent blackhole
 route prevents client traffic from falling back to the public interface if the
 uplink interface disappears.
 
-Peer public keys and tunnel parameters are declared in Nix. The private keys
-are supplied through SOPS. Add client peers manually to `wireguard.nix` and
-issue their profiles out of band. The fresh client profile uses endpoint
-`103.71.20.103:30326`, server public key
-`9FhghHiEk1Ew1yZFo+5jAChoiiZU0srXTL2PmZeLZSg=`, and `AllowedIPs =
-0.0.0.0/0`. Assign client addresses from `10.201.0.2/32` upward. Match these
-AmneziaWG interface options in each client profile:
+The public server settings, AmneziaWG parameters, and client public peers are
+in `awg-clients.json`. NixOS reads the peer list from this file. Client private
+keys stay in individual client profiles and are never stored in Git or SOPS.
+
+Create a client profile from Ubuntu WSL at the repository root:
+
+```sh
+nix shell nixpkgs#python3 nixpkgs#amneziawg-tools \
+  -c python3 scripts/new-awg-client.py --name tablet
+```
+
+Use a unique name for each device. The utility assigns the next free address,
+generates a key pair with `awg`, writes a `.conf` file under
+`~/.local/share/nixos-config/awg-client-profiles/` with mode `0600`, and adds
+only the peer name, public key, and address to `awg-clients.json`. The private
+profile stays in Ubuntu WSL's home directory, outside the repository.
+
+Review and commit the JSON change manually, then build and activate the VPS1
+configuration manually. The utility does not run Git commands, contact a
+server, or activate a generation. Import the generated profile into the
+AmneziaWG app and transfer it to the device securely.
+
+Profiles use endpoint `103.71.20.103:30326`, server public key
+`9FhghHiEk1Ew1yZFo+5jAChoiiZU0srXTL2PmZeLZSg=`, and full-tunnel IPv4 and IPv6
+routes. VPS1 does not route IPv6, so the IPv6 route intentionally fails closed.
+The matching AmneziaWG interface options are:
 
 ```ini
 Jc = 4
