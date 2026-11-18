@@ -13,6 +13,7 @@
     # ../../modules/server/auto-update
 
     ./users.nix
+    ./agent-workspace.nix
     ./networking.nix
     ../../modules/server/vpn/amneziawg.nix
     ../../modules/server/reverse-ssh.nix
