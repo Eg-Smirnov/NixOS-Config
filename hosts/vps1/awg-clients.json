@@ -35,6 +35,21 @@
       "name": "laptop",
       "public_key": "8htgEIT4/V57dFkXtKT+OYgn8HJa/F0it4n76srvDig=",
       "address": "10.201.0.3/32"
+    },
+    {
+      "name": "home-server",
+      "public_key": "7osOYap6U18f8Xuy/XWR1PkZwX67+M83AOPCMjiFaUw=",
+      "address": "10.201.0.4/32"
+    },
+    {
+      "name": "kate",
+      "public_key": "SayB0zA01P8y1PBThscrxXTXCq3e8Trw4UwaShh6KRU=",
+      "address": "10.201.0.5/32"
+    },
+    {
+      "name": "tablet",
+      "public_key": "0e3fvF6yCnYywR1UuPZwr3iarbOS/Zl15qihVpd+awI=",
+      "address": "10.201.0.6/32"
     }
   ]
 }
