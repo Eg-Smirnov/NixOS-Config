@@ -32,8 +32,6 @@ scope and the assigned task branch/worktree, but push and merge remain separate
 authority gates. Reviewer is inspection-only. Only Integrator may write a
 shared target checkout after the task authority gate.
 
-## Operations requiring explicit confirmation
-
 Do not ask the owner to approve every ordinary file edit, local commit, or non-activating check. The task assignment is the authority for routine work within its stated scope.
 
 Always inspect the current branch, `git status`, and existing diff before editing. Preserve all pre-existing changes. Never discard, overwrite, stage, commit, amend, or include unrelated work. If the assigned worktree contains changes that are not clearly part of the task, stop and clarify.
@@ -85,9 +83,6 @@ A successful local merge does not authorize NixOS activation, service restarts, 
 - Distinguish confirmed facts, deductions, assumptions, and unknowns.
 - Report checks actually performed and their exact outcomes. Do not claim that an unrun check passed.
 - If repository instructions conflict with a task request, or the task requires an approval-required operation, stop and ask the owner.
-- `secrets.yaml` is encrypted SOPS data. Never decrypt it merely for inspection.
-- Do not add plaintext credentials, private keys, or real secret values to tracked files.
-- When reviewing changes involving access, networking, storage, boot, or secrets, call out the operational risk explicitly.
 
 If a merge conflict occurs, abort with `git merge --abort` before changing the
 target unless the task record already contains owner permission naming source
