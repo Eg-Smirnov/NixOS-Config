@@ -20,6 +20,18 @@ Within the scope of an assigned task, agents may work independently in their ass
 - make and verify corrections that remain within the approved task scope;
 - prepare a change for review and, when explicitly delegated, integrate it into the local target branch as described in the team workflow.
 
+Repository rules are the mandatory safety boundary. Shared workflow, role
+instructions, and task records may only narrow these rules, except for an
+explicit task-level delegation that remains within them. A permissive sentence
+never overrides this file.
+
+For each task and reviewed range, Developer, Reviewer, and Integrator must be
+three distinct people/agents. Self-review and self-integration are forbidden;
+no waiver is available. Developer may make ordinary local commits in approved
+scope and the assigned task branch/worktree, but push and merge remain separate
+authority gates. Reviewer is inspection-only. Only Integrator may write a
+shared target checkout after the task authority gate.
+
 Do not ask the owner to approve every ordinary file edit, local commit, or non-activating check. The task assignment is the authority for routine work within its stated scope.
 
 Always inspect the current branch, `git status`, and existing diff before editing. Preserve all pre-existing changes. Never discard, overwrite, stage, commit, amend, or include unrelated work. If the assigned worktree contains changes that are not clearly part of the task, stop and clarify.
@@ -71,3 +83,10 @@ A successful local merge does not authorize NixOS activation, service restarts, 
 - Distinguish confirmed facts, deductions, assumptions, and unknowns.
 - Report checks actually performed and their exact outcomes. Do not claim that an unrun check passed.
 - If repository instructions conflict with a task request, or the task requires an approval-required operation, stop and ask the owner.
+
+If a merge conflict occurs, abort with `git merge --abort` before changing the
+target unless the task record already contains owner permission naming source
+HEAD, target HEAD, conflict scope, and resolution boundaries. An authorized
+resolution must occur in a temporary integration branch/worktree and receive a
+fresh independent review of the exact result before target merge. Target
+movement or a changed conflict requires new permission and review.
