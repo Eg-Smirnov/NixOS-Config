@@ -23,8 +23,12 @@
 
   programs.ssh = {
     extraConfig = ''
-      Host github.com
+      Match localuser server host github.com
         IdentityFile /run/secrets/ssh_private_key
+        IdentitiesOnly yes
+
+      Match localuser agent host github.com
+        IdentityFile /run/secrets/ssh_git_agent_key
         IdentitiesOnly yes
     '';
   };
