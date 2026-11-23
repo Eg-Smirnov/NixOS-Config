@@ -1,8 +1,8 @@
 # Security and secret-field inventory
 
 This page records only field names from the owner-provided templates in
-[`docs/secret-templates/`](../secret-templates/). The files are intentionally
-not parsed as YAML: they are a text inventory with empty values. No secret
+[`docs/secret-templates/`](../secret-templates/). The files are treated as
+plain-text field-name evidence rather than parsed secret configuration. No secret
 value, private key material, decrypted SOPS data, or private input content is
 present here.
 
@@ -30,8 +30,8 @@ The repository declares secret consumers without exposing their values:
   [`hosts/vps2/wireguard.nix`](../../hosts/vps2/wireguard.nix).
 
 The mapping between template field names and exact source secret keys is not
-asserted here because the owner-provided templates are not valid YAML and source
-secret values/private inputs are out of scope. A future bounded task may add a
+asserted here because source secret values/private inputs are out of scope. A
+future bounded task may add a
 non-secret mapping after reviewing open source declarations.
 
 ## Safety boundary
