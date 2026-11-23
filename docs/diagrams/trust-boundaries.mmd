@@ -1,0 +1,19 @@
+flowchart TB
+  Public["Public clients\nreachability unknown"]
+  Ingress["vps1 public ingress\nTCP 22/80/443, UDP 30326\ndeclared"]
+  Peer["AWG peer/uplink boundary\nkeys not documented"]
+  Egress["vps2 egress/NAT\nsource-declared"]
+  Reverse["Restricted reverse-SSH account\nport forwarding/listeners declared"]
+  Gateway["Nginx/ACME media gateway\npublic TLS boundary declared"]
+  Home["server local media/storage\nlocal trust boundary"]
+  Secrets["SOPS/private-input consumers\nvalues excluded"]
+
+  Public --> Ingress
+  Ingress --> Peer
+  Peer --> Egress
+  Ingress --> Reverse
+  Ingress --> Gateway
+  Reverse --> Home
+  Gateway --> Home
+  Secrets -.-> Ingress
+  Secrets -.-> Home

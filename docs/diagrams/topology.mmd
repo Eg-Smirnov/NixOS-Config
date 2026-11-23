@@ -1,0 +1,7 @@
+flowchart LR
+  Client["VPN client\n(declared peer)"] -->|AWG / UDP 30326\ndeclared| VPS1["vps1\npublic ingress\n103.71.20.103"]
+  VPS1 -->|awg-uplink\n10.200.0.1/30 -> 10.200.0.2/30\ndeclared| VPS2["vps2\nAWG egress/NAT"]
+  VPS2 -->|NAT to ens3\ninference from source| Internet["Internet"]
+  Server["server / home-server"] -->|reverse SSH :22\ndeclared| VPS1
+  Media["Public media clients"] -->|HTTPS virtual hosts\ndeclared endpoint; reachability unknown| VPS1
+  VPS1 -->|Nginx -> reverse tunnel\ndeclared/inference| LocalMedia["server media services\n8096/8989/7878/9696/8080"]
