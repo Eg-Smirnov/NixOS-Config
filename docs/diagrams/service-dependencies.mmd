@@ -1,0 +1,13 @@
+flowchart LR
+  Server["server\nsource host"] --> Media["media group + /media\ndeclared boundary"]
+  Media --> Jellyfin["Jellyfin\ndeclared"]
+  Media --> QB["qBittorrent\ndeclared"]
+  Media --> Arr["Sonarr / Radarr / Prowlarr\ndeclared"]
+  Server --> FS["FlareSolverr\n127.0.0.1:8191\ndeclared"]
+  Night["night-sleep timer\ndeclared"] --> Jellyfin
+  Night --> Suspend["declared suspend effect\nexecution unknown"]
+  Thermal["thermal-observer\n10s sampling\ndeclared"] --> ThermalData["/var/lib/thermal-observer"]
+  VPS1["vps1 Nginx/ACME\ndeclared"] -->|reverse tunnel\ninference| Media
+  ArrTimer["arr-access-expire timer\n2h declaration"] --> VPS1
+  VPS2["vps2 maintenance\ndeclared"] --> Retention["GC/log/prune policies\nexecution unknown"]
+  Auto["auto-update aggregate\nnot imported"] -.-> Dormant["source-present, dormant"]
