@@ -48,3 +48,7 @@ facts. Networking, VPN/tunnels, storage/boot, services, security/secrets, and
 operational runbooks require their own bounded tasks and evidence. Historical
 migration documents are not current deployment instructions. Do not infer
 activation, availability, or safe recovery procedures from this overview.
+
+The field-name-only secret template inventory is documented in
+[security and secrets](architecture/security-and-secrets.md). It contains no
+secret values and is not evidence that any named field is populated or active.

@@ -1,0 +1,8 @@
+wifi_ssid:
+wifi_psk:
+jellyfin_api_sleep:
+reverse_tunnel_private_key:
+ssh_private_key:
+ssh_git_agent_key:
+vpn_config:
+amneziawg_config:

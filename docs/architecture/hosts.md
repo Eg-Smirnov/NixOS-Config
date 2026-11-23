@@ -23,6 +23,9 @@ repository [`AGENTS.md`](../../AGENTS.md). The output's declaration in
 
 - The private `secrets` input and SOPS consumers are recorded only as dependency
   boundaries; no secret value or private input content is documented.
+- Host-specific secret field names are listed in the [security and secrets
+  inventory](security-and-secrets.md); the templates contain names only and do
+  not establish presence, value, permissions, or runtime use.
 - The source contains Xray and auto-update aggregates, but the supported server
   entrypoint imports AmneziaWG and comments out auto-update; Xray is abandoned
   in favour of AmneziaWG per owner decision. No service is called active solely
