@@ -60,7 +60,8 @@ result as **observed** only with host/timestamp evidence; otherwise it remains
 
 | Check | Host/prerequisite | Expected / unknown outcome | Stop gate |
 |---|---|---|---|
-| `findmnt` | all supported hosts; local shell | expected mounts may be listed; absence or unexpected source is observed evidence of a discrepancy, not a repair instruction | stop on missing or wrong `/persist`, `/nix`, `/boot`, or `/media` |
+| `findmnt` | `server`; local shell | expected `/`, `/persist`, `/nix`, `/boot`, and `/media` mounts may be listed; absence or unexpected source is observed evidence of a discrepancy | stop on missing or wrong declared mount; `/media` is required only on `server` |
+| `findmnt` | `vps1`, `vps2`; local shell | expected `/`, `/persist`, `/nix`, and `/boot` mounts may be listed; `/media` is not part of these declared layouts | stop on missing or wrong declared mount; do not infer that `/media` should exist |
 | `lsblk` (no destructive flags) | all; local shell | block devices and mount relationships may be observed; device identity remains unknown unless recorded with timestamp | stop on I/O/filesystem errors; do not format or repair |
 | `df -h` | all; local shell | capacity snapshot; thresholds are not remediation policy | stop before deletion or cleanup, especially under `/media` or `/persist` |
 | `free -h`, `uptime` | all; local shell | memory/load/uptime snapshot; transient values are not architecture facts | stop if response requires restart or resource changes |
@@ -85,10 +86,10 @@ reachability, DNS, TLS, end-to-end VPN health, and reverse-tunnel health remain
 
 | Check | Host/prerequisite | Expected / unknown outcome | Stop gate |
 |---|---|---|---|
-| `systemctl --failed` | local shell; service manager available | failed-unit list observed; empty output does not prove all application health | stop before restart/reset of any unit |
-| `systemctl status <unit>` | local shell; use a unit already named in `architecture/services.md` | active/inactive state and recent metadata observed; source enablement is not runtime proof | redact logs/paths; stop on need to restart or alter dependencies |
-| `systemctl list-timers --all` | local shell | timer schedule and last/next run observed; it does not prove job success | stop before manually triggering or changing a timer |
-| `journalctl --unit=<unit> --since=... --no-pager` | local shell; narrow time window; redact output | timestamped log evidence may explain a unit state; journal content can contain sensitive data | stop and redact; do not expose credentials or treat one transient line as diagnosis |
+| `systemctl --failed` | `server`, `vps1`, `vps2`; local shell; service manager available | failed-unit list observed; empty output does not prove all application health | stop before restart/reset of any unit |
+| `systemctl status <unit>` | `server`, `vps1`, `vps2`; local shell; use a unit already named in `architecture/services.md` for that host | active/inactive state and recent metadata observed; source enablement is not runtime proof | redact logs/paths; stop on need to restart or alter dependencies |
+| `systemctl list-timers --all` | `server`, `vps1`, `vps2`; local shell | timer schedule and last/next run observed; it does not prove job success | stop before manually triggering or changing a timer |
+| `journalctl --unit=<unit> --since=... --no-pager` | `server`, `vps1`, `vps2`; local shell; narrow time window; redact output | timestamped log evidence may explain a unit state; journal content can contain sensitive data | stop and redact; do not expose credentials or treat one transient line as diagnosis |
 
 Candidate units include those documented in the services architecture for
 media, gateway, watchdog, reverse tunnel, sleep/thermal automation, and VPS2
