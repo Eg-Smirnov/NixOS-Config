@@ -12,7 +12,7 @@ rollback.
 
 | Host/output | Filesystem and persistence model | Boot/initrd model | Recovery-sensitive boundary |
 |---|---|---|---|
-| `server` | Separate source-declared `/`, `/persist`, `/nix`, `/boot`, `/media`, and swap filesystems; impermanence persists selected `/var/lib`, NetworkManager connections, and server user state (**declared**) | systemd-boot, EFI variable access, configuration limit 10 (**declared**) | Device UUIDs, EFI state, mounts, generations, and media availability are **unknown** |
+| `server` | Separate source-declared `/`, `/persist`, `/nix`, `/boot`, and `/media` filesystems plus a swap device; impermanence persists selected `/var/lib`, NetworkManager connections, and server user state (**declared**) | systemd-boot, EFI variable access, configuration limit 10 (**declared**) | Device UUIDs, EFI state, mounts, generations, and media availability are **unknown** |
 | `vps1` | disko declares GPT/ESP/swap on `/dev/vda`, LVM+Btrfs, and subvolumes mounted at `/`, `/nix`, `/persist`; selected identity/state persists (**declared**) | GRUB; `/persist` is needed for boot; initrd `rollback-root` recreates the root subvolume (**declared**) | Disk identity, disko layout, Btrfs state, rollback behavior, and boot success are **unknown** |
 | `vps2` | Manual hardware source declares Btrfs subvolumes for `/`, `/nix`, `/persist`, separate ext4 `/boot`, and swap by label; selected identity/state persists (**declared**) | GRUB on `/dev/vda` with configuration limit 2; initrd recreates the ephemeral root subvolume (**declared**) | Labels, root recreation, boot disk, preserved state, and reboot success are **unknown** |
 
