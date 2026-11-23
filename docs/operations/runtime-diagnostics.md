@@ -31,9 +31,11 @@ or privileged access. Use the host's local shell where possible, preserve the
 original output privately, and redact before recording evidence.
 
 Stop and escalate to the owner if a check suggests a failing connectivity-
-critical tunnel, missing `/persist`/`/nix`/`/media` mount, disk or filesystem
-errors, boot/EFI uncertainty, exposed credentials, unexpected listeners, or a
-need to restart, repair, delete, remount, reconfigure, or activate anything.
+critical tunnel, a missing declared mount (`/media` is required only on
+`server`; `/persist`, `/nix`, and `/boot` follow each host's model), disk or
+filesystem errors, boot/EFI uncertainty, exposed credentials, unexpected
+listeners, or a need to restart, repair, delete, remount, reconfigure, or
+activate anything.
 This guide contains no recovery or remediation commands.
 
 ## Host boundaries
@@ -91,10 +93,12 @@ reachability, DNS, TLS, end-to-end VPN health, and reverse-tunnel health remain
 | `systemctl list-timers --all` | `server`, `vps1`, `vps2`; local shell | timer schedule and last/next run observed; it does not prove job success | stop before manually triggering or changing a timer |
 | `journalctl --unit=<unit> --since=... --no-pager` | `server`, `vps1`, `vps2`; local shell; narrow time window; redact output | timestamped log evidence may explain a unit state; journal content can contain sensitive data | stop and redact; do not expose credentials or treat one transient line as diagnosis |
 
-Candidate units include those documented in the services architecture for
-media, gateway, watchdog, reverse tunnel, sleep/thermal automation, and VPS2
-maintenance. A unit's declaration, enablement, or timer schedule never proves
-that it is running, healthy, reachable, or has completed successfully.
+Candidate units include the media, gateway/access, sleep/thermal automation,
+and VPS2 maintenance rows in [`architecture/services.md`](../architecture/services.md).
+Watchdog and reverse-tunnel units are additionally described by the networking
+and VPN architecture pages and their linked source modules. A unit's
+declaration, enablement, or timer schedule never proves that it is running,
+healthy, reachable, or has completed successfully.
 
 ## Owner gates and future work
 
