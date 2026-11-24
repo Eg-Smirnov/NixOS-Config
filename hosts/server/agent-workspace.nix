@@ -2,7 +2,7 @@
 
 let
   pi = pkgs.writeShellScriptBin "pi" ''
-    exec ${pkgs.nodejs}/bin/npx --yes @mariozechner/pi-coding-agent "$@"
+    exec ${pkgs.nodejs_24}/bin/npx --yes @earendil-works/pi-coding-agent "$@"
   '';
 
   piOrchestrator = pkgs.writeShellScriptBin "pi-orchestrator" ''
@@ -24,7 +24,7 @@ in
     packages = with pkgs; [
       codex
       tmux
-      nodejs
+      nodejs_24
       pi
       piOrchestrator
     ];
