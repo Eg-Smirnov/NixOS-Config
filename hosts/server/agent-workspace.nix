@@ -1,5 +1,14 @@
 { pkgs, ... }:
 
+let
+  pi = pkgs.writeShellScriptBin "pi" ''
+    exec ${pkgs.nodejs_24}/bin/npx --yes @earendil-works/pi-coding-agent "$@"
+  '';
+
+  piOrchestrator = pkgs.writeShellScriptBin "pi-orchestrator" ''
+    exec ${pi}/bin/pi -e npm:@groeponline/pi-agent-orchestrator "$@"
+  '';
+in
 {
   users.groups.agent = { };
 
@@ -15,6 +24,9 @@
     packages = with pkgs; [
       codex
       tmux
+      nodejs_24
+      pi
+      piOrchestrator
     ];
   };
 }
