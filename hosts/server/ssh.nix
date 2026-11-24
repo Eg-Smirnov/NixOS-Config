@@ -35,6 +35,7 @@
 
   users.users.server.openssh.authorizedKeys.keys = [
     infrastructure.admin.publicKey
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFl12Pmt/WgxuShZMASShnArE/epMQe8DkZlIYtINFiF u0_a265@localhost"
   ];
 
   networking.firewall.allowedTCPPorts = [ 22 ];
