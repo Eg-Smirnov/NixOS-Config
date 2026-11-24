@@ -1,19 +1,25 @@
+%% Source labels: docs/architecture/security-and-secrets.md, docs/architecture/storage-and-boot.md
+%% Source files: hosts/vps1/networking.nix, hosts/vps1/ssh.nix, hosts/vps2/wireguard.nix, hosts/server/impermanence.nix
 flowchart TB
   Public["Public clients\nreachability unknown"]
-  Ingress["vps1 public ingress\nTCP 22/80/443, UDP 30326\ndeclared"]
-  Peer["AWG peer/uplink boundary\nkeys not documented"]
+  Ingress["vps1 public boundary\nTCP 22/80/443; UDP 30326\nsource-declared"]
+  AWG["AWG peer/uplink boundary\nkey material excluded"]
   Egress["vps2 egress/NAT\nsource-declared"]
-  Reverse["Restricted reverse-SSH account\nport forwarding/listeners declared"]
+  SSH["Restricted reverse-tunnel account\nremote forwarding/listeners declared"]
   Gateway["Nginx/ACME media gateway\npublic TLS boundary declared"]
-  Home["server local media/storage\nlocal trust boundary"]
+  Home["server local services\n/media user-data boundary"]
+  Storage["/persist, /nix, /boot\nrecovery-sensitive boundary"]
   Secrets["SOPS/private-input consumers\nvalues excluded"]
+  Excluded["wsl\nexcluded legacy target"]
 
   Public --> Ingress
-  Ingress --> Peer
-  Peer --> Egress
-  Ingress --> Reverse
+  Ingress --> AWG
+  AWG --> Egress
+  Ingress --> SSH
   Ingress --> Gateway
-  Reverse --> Home
+  SSH --> Home
   Gateway --> Home
+  Home --> Storage
   Secrets -.-> Ingress
   Secrets -.-> Home
+  Excluded -.-> Boundary["not part of supported trust model"]

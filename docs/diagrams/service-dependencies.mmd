@@ -1,13 +1,21 @@
+%% Source labels: docs/architecture/services.md, docs/architecture/vpn-and-tunnels.md
+%% Source files: modules/server/default imports, modules/server/reverse-ssh.nix, modules/vps/media-gateway.nix
 flowchart LR
-  Server["server\nsource host"] --> Media["media group + /media\ndeclared boundary"]
-  Media --> Jellyfin["Jellyfin\ndeclared"]
-  Media --> QB["qBittorrent\ndeclared"]
-  Media --> Arr["Sonarr / Radarr / Prowlarr\ndeclared"]
-  Server --> FS["FlareSolverr\n127.0.0.1:8191\ndeclared"]
-  Night["night-sleep timer\ndeclared"] --> Jellyfin
-  Night --> Suspend["declared suspend effect\nexecution unknown"]
-  Thermal["thermal-observer\n10s sampling\ndeclared"] --> ThermalData["/var/lib/thermal-observer"]
-  VPS1["vps1 Nginx/ACME\ndeclared"] -->|reverse tunnel\ninference| Media
-  ArrTimer["arr-access-expire timer\n2h declaration"] --> VPS1
-  VPS2["vps2 maintenance\ndeclared"] --> Retention["GC/log/prune policies\nexecution unknown"]
+  Server["server\nsource host"] --> Media["media group + /media\nsource-declared boundary"]
+  Media --> Jellyfin["jellyfin.service\nenabled; exact port unknown"]
+  Media --> QB["qbittorrent.service\nenabled"]
+  Media --> Arr["sonarr/radarr/prowlarr\nenabled"]
+  Server --> FS["flaresolverr.service\n127.0.0.1:8191\nsource-declared"]
+
+  Server --> Reverse["reverse-media-ssh.service\nremote 18096/18989/17878/19696/18080"]
+  Reverse --> Gateway["vps1 nginx.service\nloopback backends"]
+  Gateway --> Public["public virtual hosts\nDNS/TLS/reachability unknown"]
+
+  Night["night-sleep.timer\nsource-declared"] --> Jellyfin
+  Night --> Suspend["suspend effect\nexecution unknown"]
+  Thermal["thermal-observer.service\n10-second sampling"] --> ThermalData["/var/lib/thermal-observer"]
+  ArrTimer["arr-access-expire.timer\n2-hour declaration"] --> Gateway
+  VPS2["vps2 maintenance policies\nsource-declared"] --> Retention["GC/journal/prune\nexecution unknown"]
+
   Auto["auto-update aggregate\nnot imported"] -.-> Dormant["source-present, dormant"]
+  Xray["Xray modules\nnot imported"] -.-> Unsupported["not a current path"]

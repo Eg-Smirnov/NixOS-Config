@@ -6,7 +6,9 @@ source; **inference** means derived from those declarations; **owner-stated** an
 **observed** require separate evidence; **unknown** means this source-only task
 cannot establish the runtime fact. No statement here proves current mounts,
 active generations, disk identity, EFI/NVRAM state, or successful reboot or
-rollback.
+rollback. For the source-level host map use [hosts](hosts.md); for owner-gated
+recovery boundaries use [recovery](../operations/recovery.md) and [backup and
+restore](../operations/backup-restore.md).
 
 ## Host comparison
 
@@ -83,3 +85,7 @@ declares GRUB on `/dev/vda` with configuration limit 2.
 - Evidence needed for a future recovery task includes owner-approved runtime
   facts about mounts, disk identity, active generation, boot state, persistence
   contents, and media availability. Until then these remain **unknown**.
+- The repository does not declare a backup job, backup destination, retention
+  policy, or successful backup set. Do not infer recoverability from
+  impermanence, snapshots mentioned in historical documents, or persisted
+  directories; see [backup and restore](../operations/backup-restore.md).

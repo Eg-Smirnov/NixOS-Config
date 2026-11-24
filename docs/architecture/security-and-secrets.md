@@ -4,7 +4,9 @@ This page records only field names from the owner-provided templates in
 [`docs/secret-templates/`](../secret-templates/). The files are treated as
 plain-text field-name evidence rather than parsed secret configuration. No secret
 value, private key material, decrypted SOPS data, or private input content is
-present here.
+present here. For the architecture boundary use [system overview](system-overview.md);
+for owner-gated handling and diagnostics use [deployment](../operations/deployment.md)
+and [runtime diagnostics](../operations/runtime-diagnostics.md).
 
 ## Template fields by host
 
@@ -37,7 +39,8 @@ non-secret mapping after reviewing open source declarations.
 ## Safety boundary
 
 Template fields do not prove that a secret exists, is populated, readable, or
-used by an active generation. Do not replace these placeholders with values,
-commit real credentials, decrypt SOPS data, or treat this inventory as runtime
-evidence. The repository [`AGENTS.md`](../../AGENTS.md) remains authoritative
-for secret handling and owner approval gates.
+used by an active generation. Backup or recovery claims about secret material
+are also **unknown**; no secret backup is documented here. Do not replace these
+placeholders with values, commit real credentials, decrypt SOPS data, or treat
+this inventory as runtime evidence. The repository [`AGENTS.md`](../../AGENTS.md)
+remains authoritative for secret handling and owner approval gates.

@@ -1,54 +1,97 @@
-# NixOS configuration overview
+# NixOS configuration documentation
 
 ## Scope and evidence
 
-This page is a navigation layer for the declarative configuration in this
-repository. It describes what Git/Nix source declares; it does not prove that a
-generation is built, activated, reachable, or healthy.
+This documentation describes the repository's declarative source. It does not
+prove that a generation is built, activated, reachable, backed up, or healthy.
+Use these evidence labels consistently:
 
-Evidence labels used throughout the documentation are:
-
-- **declared** — directly present in a tracked Nix or Markdown source file;
-- **inference** — a conclusion from declared imports or connections, not runtime
-  evidence;
+- **declared** — present in tracked Nix or Markdown source;
+- **inference** — derived from multiple declarations;
 - **owner-stated** — supplied by the owner and not independently checked here;
-- **observed** — supported by dated runtime evidence (none is collected by this
-  task);
+- **observed** — supported by dated runtime evidence;
 - **unknown** — not established by the available evidence.
 
-Source paths are repository-relative and link to the files that support each
-claim. Private inputs and secret values are intentionally not reproduced.
+Source paths are repository-relative. Secret values, private keys, private flake
+input contents, and credentials are intentionally excluded.
 
-## Supported host outputs
+## Start here
 
-The supported source topology is the `server`, `vps1`, and `vps2` outputs. The
-entrypoints, declared responsibilities, and source cross-links are maintained
-in the [host matrix](architecture/hosts.md).
+| Need | Page | What it provides |
+|---|---|---|
+| System map | [System overview](architecture/system-overview.md) | Supported outputs, entrypoints/imports, responsibilities, and source-level data flows |
+| Host map | [Host matrix](architecture/hosts.md) | Host-local entrypoints, responsibilities, source links, and boundaries |
+| Operations | [Operations index](operations/deployment.md) | Deployment, recovery, backup/restore, troubleshooting, and diagnostics boundaries |
+| Evidence collection | [Runtime diagnostics](operations/runtime-diagnostics.md) | Read-only checks; no remediation or activation |
 
-At source level, `server` is the home host with AmneziaWG, reverse tunnels,
-media services, power/sleep automation, and the agent workspace; `vps1` is the
-public VPN ingress and media gateway; and `vps2` is the VPN egress/NAT host.
-These are **declared** or **inferred** from [`flake.nix`](../flake.nix), host
-entrypoints, and imported modules. Active generations, service health, network
-reachability, DNS/TLS state, and current routes are **unknown** without separate
-runtime evidence.
+## Architecture
 
-## Abandoned legacy target: `wsl`
+- [System overview](architecture/system-overview.md) — the source-based architecture and import graph.
+- [Hosts](architecture/hosts.md) — supported `server`, `vps1`, and `vps2` outputs.
+- [Networking](architecture/networking.md) — declared addresses, firewall surface, and routing boundaries.
+- [VPN and tunnels](architecture/vpn-and-tunnels.md) — AmneziaWG, reverse SSH, and media forwarding.
+- [Services](architecture/services.md) — declared units, ports, timers, dependencies, and dormant source.
+- [Storage and boot](architecture/storage-and-boot.md) — filesystems, impermanence, boot, and recovery-sensitive boundaries.
+- [Security and secrets](architecture/security-and-secrets.md) — field-name inventory and secret-consumer boundaries only.
 
-The `wsl` flake output and `hosts/wsl` tree are an **abandoned legacy target**.
-They are outside the supported architecture and must not be changed, evaluated,
-built, or maintained without a separate owner request. This repository-level
-boundary is defined in [`AGENTS.md`](../AGENTS.md); its presence in
-[`flake.nix`](../flake.nix) is not evidence that it is supported or active.
+The architecture pages are intentionally cross-linked rather than duplicated.
+Networking detail belongs in [networking](architecture/networking.md) and
+[tunnel detail](architecture/vpn-and-tunnels.md); service detail belongs in
+[services](architecture/services.md).
 
-## Documentation boundaries
+## Diagrams
 
-The architecture pages deliberately separate source declarations from runtime
-facts. Networking, VPN/tunnels, storage/boot, services, security/secrets, and
-operational runbooks require their own bounded tasks and evidence. Historical
-migration documents are not current deployment instructions. Do not infer
-activation, availability, or safe recovery procedures from this overview.
+The diagrams are source-labelled summaries, not runtime topology proofs:
 
-The field-name-only secret template inventory is documented in
-[security and secrets](architecture/security-and-secrets.md). It contains no
-secret values and is not evidence that any named field is populated or active.
+- [Network topology](diagrams/topology.mmd)
+- [Service dependencies](diagrams/service-dependencies.mmd)
+- [Trust boundaries](diagrams/trust-boundaries.mmd)
+
+There is no Mermaid renderer or link checker in CI. Review diagrams alongside
+the linked source pages and treat every runtime state as **unknown** unless a
+dated observation is attached.
+
+## Current operations
+
+These runbooks are deliberately skeletons. They identify evidence and approval
+gates without providing activation, network-change, storage-change, repair, or
+secret-handling procedures:
+
+- [Deployment](operations/deployment.md) — review/build/owner activation gate.
+- [Recovery](operations/recovery.md) — stop conditions and owner-led recovery scope.
+- [Backup and restore](operations/backup-restore.md) — backup inventory gap and restore gate.
+- [Troubleshooting](operations/troubleshooting.md) — symptom-to-read-only-evidence map.
+- [Runtime diagnostics](operations/runtime-diagnostics.md) — bounded local diagnostics.
+
+## Host-local and historical material
+
+Host-local context is kept beside the host source:
+
+- [`hosts/vps1/README.md`](../hosts/vps1/README.md)
+- [`hosts/vps2/README.md`](../hosts/vps2/README.md)
+- [Agent workspace](agent-workspace.md) — source and owner-stated workspace notes.
+
+The following are historical records, not current procedures: [`vps1 migration
+runbook`](../hosts/vps1/migration-runbook.md), [`vps2 migration
+runbook`](../hosts/vps2/migration-runbook.md), and [`vps2 ISO bootstrap`](../hosts/vps2/iso-network-bootstrap.md).
+They contain superseded installation or 3x-ui steps and must not be used as
+current deployment instructions. The stage report is historical evidence:
+[stage 1 report](agent-stage1-report.md).
+
+## Supported outputs and explicit exclusions
+
+The supported source outputs are `server`, `vps1`, and `vps2`, registered in
+[`flake.nix`](../flake.nix). In source terms, `server` is the home host,
+`vps1` is public ingress/media gateway, and `vps2` is AWG egress/NAT. This is
+**declared/inference** only; active generations, service health, routes,
+reachability, DNS/TLS, mounts, and backup state are **unknown**.
+
+`wsl` and `hosts/wsl` are an abandoned legacy target. They are explicitly
+excluded from this architecture and must not be inspected, evaluated, built,
+changed, or maintained without a separate owner request, per
+[`AGENTS.md`](../AGENTS.md). Their presence in the flake is not evidence of
+support.
+
+No current documentation claims that backups exist, that any tunnel is
+connected, that a public endpoint is reachable, or that recovery is safe. Those
+claims require owner-approved, dated runtime or provider evidence.

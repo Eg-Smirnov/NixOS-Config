@@ -1,7 +1,15 @@
+%% Source labels: docs/architecture/networking.md, docs/architecture/vpn-and-tunnels.md
+%% Source files: hosts/vps1/networking.nix, hosts/vps1/wireguard.nix, hosts/vps2/wireguard.nix, modules/server/reverse-ssh.nix
 flowchart LR
-  Client["VPN client\n(declared peer)"] -->|AWG / UDP 30326\ndeclared| VPS1["vps1\npublic ingress\n103.71.20.103"]
-  VPS1 -->|awg-uplink\n10.200.0.1/30 -> 10.200.0.2/30\ndeclared| VPS2["vps2\nAWG egress/NAT"]
-  VPS2 -->|NAT to ens3\ninference from source| Internet["Internet"]
-  Server["server / home-server"] -->|reverse SSH :22\ndeclared| VPS1
-  Media["Public media clients"] -->|HTTPS virtual hosts\ndeclared endpoint; reachability unknown| VPS1
-  VPS1 -->|Nginx -> reverse tunnel\ndeclared/inference| LocalMedia["server media services\n8096/8989/7878/9696/8080"]
+  Client["Configured AWG client peer\nsource-declared"] -->|UDP 30326\nsource-declared; reachability unknown| VPS1["vps1\n103.71.20.103\npublic ingress"]
+  VPS1 -->|awg-uplink\n10.200.0.1/30 -> 10.200.0.2/30\nsource-declared| VPS2["vps2\nAWG egress/NAT"]
+  VPS2 -->|NAT from awg-exit to ens3\nsource-declared| Internet["Public egress\nruntime unknown"]
+
+  Server["server / home-server"] -->|reverse SSH\nremote :22; source-declared| VPS1
+  Public["Public media client\nreachability unknown"] -->|HTTPS virtual host\nsource-declared endpoint| VPS1
+  VPS1 -->|Nginx -> loopback remote forwards\nsource-declared/inference| Media["server media\n8096/8989/7878/9696/8080\nsource-declared forward targets"]
+
+  Server -.->|secret-backed full-tunnel AWG\nendpoint and runtime unknown| SecretVpn["Secret-defined VPN config"]
+  SecretVpn -.->|route/egress not in tracked source| UnknownEgress["Endpoint unknown"]
+
+  Excluded["wsl\nabandoned legacy target"] -.->|excluded from current topology| Boundary["No supported flow"]
