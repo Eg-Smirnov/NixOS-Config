@@ -47,6 +47,7 @@ let
                         if event is None:
                             break
                         if Detection.is_type(event.type):
+                            print("wake word detected", flush=True)
                             tts_file = pathlib.Path("/run/server-voice/wake-response.wav")
                             subprocess.run(
                                 [
@@ -71,9 +72,7 @@ let
                                 ],
                                 check=True,
                             )
-                            await client.write_event(
-                                Detect(names=["${cfg.wakeWord}"]).event()
-                            )
+                            break
             except Exception as error:
                 print(f"voice event handler disconnected: {error}", flush=True)
                 await asyncio.sleep(2)
