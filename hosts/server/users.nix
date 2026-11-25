@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  environment.shellAliases.rebuild = "sudo nixos-rebuild switch --flake ~/NixOS-Config#server";
+  environment.shellAliases.rebuild = "sudo nixos-rebuild switch --flake github:Eg-Smirnov/NixOS-Config#server";
 
   users.users."server" = {
     isNormalUser = true;
