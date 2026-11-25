@@ -31,5 +31,8 @@
     ../../modules/server/power.nix
     ../../modules/server/night-sleep.nix
     ../../modules/server/thermal-observer.nix
+    ../../modules/server/voice-assistant.nix
   ];
+
+  services.serverVoiceAssistant.enable = true;
 }
