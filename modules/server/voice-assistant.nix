@@ -28,6 +28,7 @@ let
     flakeIgnore = [ "E501" ];
   } ''
     import asyncio
+    import pathlib
     import subprocess
 
     from wyoming.client import AsyncClient
@@ -46,8 +47,29 @@ let
                         if event is None:
                             break
                         if Detection.is_type(event.type):
-                            subprocess.Popen(
-                                ["${playTone}"]
+                            tts_file = pathlib.Path("/run/server-voice/wake-response.wav")
+                            subprocess.run(
+                                [
+                                    "${pkgs.piper-tts}/bin/piper",
+                                    "-m",
+                                    "${cfg.piperModel}",
+                                    "-c",
+                                    "${cfg.piperModel}.json",
+                                    "-f",
+                                    str(tts_file),
+                                ],
+                                input="Чем могу помочь?\\n",
+                                text=True,
+                                check=True,
+                            )
+                            subprocess.run(
+                                [
+                                    "${pkgs.alsa-utils}/bin/aplay",
+                                    "-D",
+                                    "${cfg.playbackDevice}",
+                                    str(tts_file),
+                                ],
+                                check=True,
                             )
                             await client.write_event(
                                 Detect(names=["${cfg.wakeWord}"]).event()
@@ -85,6 +107,12 @@ in
       type = lib.types.str;
       default = "/var/lib/server-voice/tone-440.wav";
       description = "WAV file played by the initial test scenario.";
+    };
+
+    piperModel = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/server-voice/models/ru_RU-dmitri-medium.onnx";
+      description = "Path to the Piper ONNX voice model.";
     };
   };
 
@@ -194,6 +222,7 @@ in
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectHome = true;
+        RuntimeDirectory = "server-voice";
       };
     };
 
