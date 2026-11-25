@@ -24,15 +24,39 @@ let
   '';
 
   eventHandler = pkgs.writers.writePython3Bin "server-voice-event-handler" {
-    libraries = [ pkgs.python313Packages.wyoming ];
+    libraries = [
+      pkgs.python313Packages.faster-whisper
+      pkgs.python313Packages.wyoming
+    ];
     flakeIgnore = [ "E501" ];
   } ''
     import asyncio
     import pathlib
     import subprocess
+    import wave
 
+    from faster_whisper import WhisperModel
+    from wyoming.audio import AudioChunk, AudioStart, AudioStop
     from wyoming.client import AsyncClient
     from wyoming.wake import Detect, Detection
+
+    model = WhisperModel("${cfg.whisperModel}", device="cpu", compute_type="int8")
+
+
+    def speak(text):
+        tts_file = pathlib.Path("/run/server-voice/response.wav")
+        subprocess.run(
+            [
+                "${pkgs.piper-tts}/bin/piper",
+                "-m", "${cfg.piperModel}",
+                "-c", "${cfg.piperModel}.json",
+                "-f", str(tts_file),
+            ], input=text + "\\n", text=True, check=True
+        )
+        subprocess.run(
+            ["${pkgs.alsa-utils}/bin/aplay", "-D", "${cfg.playbackDevice}",
+             str(tts_file)], check=True
+        )
 
 
     async def main():
@@ -42,36 +66,37 @@ let
                     await client.write_event(
                         Detect(names=["${cfg.wakeWord}"]).event()
                     )
+                    audio = bytearray()
+                    audio_start = None
                     while True:
                         event = await client.read_event()
                         if event is None:
                             break
                         if Detection.is_type(event.type):
                             print("wake word detected", flush=True)
-                            tts_file = pathlib.Path("/run/server-voice/wake-response.wav")
-                            subprocess.run(
-                                [
-                                    "${pkgs.piper-tts}/bin/piper",
-                                    "-m",
-                                    "${cfg.piperModel}",
-                                    "-c",
-                                    "${cfg.piperModel}.json",
-                                    "-f",
-                                    str(tts_file),
-                                ],
-                                input="Чем могу помочь?\\n",
-                                text=True,
-                                check=True,
+                        elif AudioStart.is_type(event.type):
+                            audio_start = AudioStart.from_event(event)
+                            audio.clear()
+                        elif AudioChunk.is_type(event.type):
+                            audio.extend(AudioChunk.from_event(event).audio)
+                        elif AudioStop.is_type(event.type) and audio_start is not None:
+                            sample = pathlib.Path("/run/server-voice/command.wav")
+                            with wave.open(str(sample), "wb") as wav:
+                                wav.setnchannels(audio_start.channels)
+                                wav.setsampwidth(audio_start.width)
+                                wav.setframerate(audio_start.rate)
+                                wav.writeframes(audio)
+                            segments, _ = model.transcribe(
+                                str(sample), language="ru", vad_filter=True
                             )
-                            subprocess.run(
-                                [
-                                    "${pkgs.alsa-utils}/bin/aplay",
-                                    "-D",
-                                    "${cfg.playbackDevice}",
-                                    str(tts_file),
-                                ],
-                                check=True,
-                            )
+                            transcript = " ".join(
+                                segment.text.strip() for segment in segments
+                            ).strip()
+                            print(f"transcript: {transcript!r}", flush=True)
+                            if transcript.lower() == "тон":
+                                subprocess.run(["${playTone}"], check=True)
+                            else:
+                                speak("Я услышал: " + (transcript or "тишину"))
                             break
             except Exception as error:
                 print(f"voice event handler disconnected: {error}", flush=True)
@@ -112,6 +137,12 @@ in
       type = lib.types.str;
       default = "/var/lib/server-voice/models/ru_RU-dmitri-medium.onnx";
       description = "Path to the Piper ONNX voice model.";
+    };
+
+    whisperModel = lib.mkOption {
+      type = lib.types.str;
+      default = "/var/lib/server-voice/models/whisper-base";
+      description = "Path to the local faster-whisper model directory.";
     };
   };
 
