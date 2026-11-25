@@ -9,7 +9,7 @@ let
     import struct
     import wave
 
-    with wave.open(${lib.escapeShellArg cfg.toneFile}, "wb") as wav:
+    with wave.open(${builtins.toJSON cfg.toneFile}, "wb") as wav:
         wav.setnchannels(2)
         wav.setsampwidth(2)
         wav.setframerate(48000)
