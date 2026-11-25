@@ -22,6 +22,36 @@ let
   playTone = pkgs.writeShellScript "server-voice-play-tone" ''
     exec ${pkgs.alsa-utils}/bin/aplay -D ${lib.escapeShellArg cfg.playbackDevice} ${cfg.toneFile}
   '';
+
+  eventHandler = pkgs.writers.writePython3Bin "server-voice-event-handler" {
+    libraries = [ pkgs.python313Packages.wyoming ];
+    flakeIgnore = [ "E501" ];
+  } ''
+    import asyncio
+    import subprocess
+
+    from wyoming.client import AsyncClient
+    from wyoming.wake import Detection
+
+
+    async def main():
+        while True:
+            try:
+                async with AsyncClient.from_uri("tcp://127.0.0.1:10500") as client:
+                    while True:
+                        event = await client.read_event()
+                        if event is None:
+                            break
+                        if Detection.is_type(event.type):
+                            subprocess.Popen(
+                                ["${playTone}"]
+                            )
+            except Exception as error:
+                print(f"voice event handler disconnected: {error}", flush=True)
+                await asyncio.sleep(2)
+
+    asyncio.run(main())
+  '';
 in
 {
   options.services.serverVoiceAssistant = {
@@ -129,7 +159,6 @@ in
             --mic-command-channels 1 \
             --wake-uri tcp://127.0.0.1:10400 \
             --wake-word-name ${lib.escapeShellArg cfg.wakeWord} \
-            --detection-command ${playTone} \
             --debug
         '';
         Restart = "on-failure";
@@ -141,6 +170,24 @@ in
         ProtectSystem = "strict";
         ProtectHome = true;
         ReadWritePaths = [ "/var/lib/server-voice" ];
+      };
+    };
+
+    systemd.services.server-voice-event-handler = {
+      description = "Handle voice wake-word events";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "server-voice-satellite.service" ];
+      wants = [ "server-voice-satellite.service" ];
+      serviceConfig = {
+        ExecStart = "${eventHandler}/bin/server-voice-event-handler";
+        Restart = "always";
+        User = "server-voice";
+        Group = "server-voice";
+        SupplementaryGroups = [ "audio" ];
+        NoNewPrivileges = true;
+        PrivateTmp = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
       };
     };
 
