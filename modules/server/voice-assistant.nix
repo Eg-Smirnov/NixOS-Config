@@ -100,7 +100,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.wyoming-openwakeword}/bin/wyoming-openwakeword --uri tcp://127.0.0.1:10400";
+        ExecStart = "${pkgs.wyoming-openwakeword}/bin/wyoming-openwakeword --uri tcp://127.0.0.1:10400 --debug";
         Restart = "on-failure";
         User = "server-voice";
         Group = "server-voice";
@@ -129,7 +129,8 @@ in
             --mic-command-channels 1 \
             --wake-uri tcp://127.0.0.1:10400 \
             --wake-word-name ${lib.escapeShellArg cfg.wakeWord} \
-            --detection-command ${playTone}
+            --detection-command ${playTone} \
+            --debug
         '';
         Restart = "on-failure";
         User = "server-voice";
