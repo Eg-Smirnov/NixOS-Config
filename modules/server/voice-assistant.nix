@@ -31,13 +31,16 @@ let
     import subprocess
 
     from wyoming.client import AsyncClient
-    from wyoming.wake import Detection
+    from wyoming.wake import Detect, Detection
 
 
     async def main():
         while True:
             try:
                 async with AsyncClient.from_uri("tcp://127.0.0.1:10500") as client:
+                    await client.write_event(
+                        Detect(names=["${cfg.wakeWord}"]).event()
+                    )
                     while True:
                         event = await client.read_event()
                         if event is None:
@@ -45,6 +48,9 @@ let
                         if Detection.is_type(event.type):
                             subprocess.Popen(
                                 ["${playTone}"]
+                            )
+                            await client.write_event(
+                                Detect(names=["${cfg.wakeWord}"]).event()
                             )
             except Exception as error:
                 print(f"voice event handler disconnected: {error}", flush=True)
