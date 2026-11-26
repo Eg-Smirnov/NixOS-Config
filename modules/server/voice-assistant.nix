@@ -28,7 +28,7 @@ let
       pkgs.python313Packages.faster-whisper
       pkgs.python313Packages.wyoming
     ];
-    flakeIgnore = [ "E501" ];
+    flakeIgnore = [ "E501" "W503" ];
   } ''
     import asyncio
     import pathlib
@@ -79,7 +79,15 @@ let
                             audio.clear()
                         elif AudioChunk.is_type(event.type):
                             audio.extend(AudioChunk.from_event(event).audio)
-                        elif AudioStop.is_type(event.type) and audio_start is not None:
+                        elif (
+                            AudioStop.is_type(event.type)
+                            or (
+                                audio_start is not None
+                                and len(audio)
+                                >= audio_start.rate * audio_start.width
+                                * audio_start.channels * 5
+                            )
+                        ) and audio_start is not None:
                             sample = pathlib.Path("/run/server-voice/command.wav")
                             with wave.open(str(sample), "wb") as wav:
                                 wav.setnchannels(audio_start.channels)
@@ -223,7 +231,6 @@ in
             --mic-command-channels 1 \
             --wake-uri tcp://127.0.0.1:10400 \
             --wake-word-name ${lib.escapeShellArg cfg.wakeWord} \
-            --vad \
             --debug
         '';
         Restart = "on-failure";
