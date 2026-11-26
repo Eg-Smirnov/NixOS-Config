@@ -77,8 +77,15 @@ let
                         elif AudioStart.is_type(event.type):
                             audio_start = AudioStart.from_event(event)
                             audio.clear()
+                            print(
+                                f"audio start: {audio_start.rate}Hz "
+                                f"{audio_start.channels}ch",
+                                flush=True,
+                            )
                         elif AudioChunk.is_type(event.type):
                             audio.extend(AudioChunk.from_event(event).audio)
+                            if len(audio) % (audio_start.rate * audio_start.width * 16000) < 2048 if audio_start else False:
+                                print(f"audio bytes: {len(audio)}", flush=True)
                         elif (
                             AudioStop.is_type(event.type)
                             or (
