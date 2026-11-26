@@ -218,6 +218,8 @@ in
         PULSE_SERVER = "/run/pulse/native";
         PULSE_COOKIE = "/run/pulse/cookie";
         CLIENT_NAME = "home-server";
+        HOST = "127.0.0.1";
+        PORT = "6053";
         ENABLE_ENCRYPTION = "1";
         AUDIO_INPUT_DEVICE = "default";
         AUDIO_OUTPUT_DEVICE = "pulse";
