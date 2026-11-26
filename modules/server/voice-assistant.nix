@@ -86,7 +86,7 @@ let
                             )
                         elif AudioChunk.is_type(event.type):
                             audio.extend(AudioChunk.from_event(event).audio)
-                            if len(audio) % (audio_start.rate * audio_start.width * 16000) < 2048 if audio_start else False:
+                            if len(audio) % 16384 == 0:
                                 print(f"audio bytes: {len(audio)}", flush=True)
                         elif (
                             AudioStop.is_type(event.type)
