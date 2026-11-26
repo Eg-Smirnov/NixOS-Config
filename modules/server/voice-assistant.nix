@@ -38,7 +38,6 @@ let
     from faster_whisper import WhisperModel
     from wyoming.audio import AudioChunk, AudioStart, AudioStop
     from wyoming.client import AsyncClient
-    from wyoming.pipeline import PipelineStage, RunPipeline
     from wyoming.wake import Detect, Detection
 
     model = WhisperModel("${cfg.whisperModel}", device="cpu", compute_type="int8")
@@ -75,14 +74,6 @@ let
                             break
                         if Detection.is_type(event.type):
                             print("wake word detected", flush=True)
-                            await client.write_event(
-                                RunPipeline(
-                                    start_stage=PipelineStage.ASR,
-                                    end_stage=PipelineStage.HANDLE,
-                                    wake_word_name="${cfg.wakeWord}",
-                                    restart_on_end=False,
-                                ).event()
-                            )
                         elif AudioStart.is_type(event.type):
                             audio_start = AudioStart.from_event(event)
                             audio.clear()
@@ -232,6 +223,7 @@ in
             --mic-command-channels 1 \
             --wake-uri tcp://127.0.0.1:10400 \
             --wake-word-name ${lib.escapeShellArg cfg.wakeWord} \
+            --vad \
             --debug
         '';
         Restart = "on-failure";
