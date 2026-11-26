@@ -74,6 +74,8 @@ let
                             break
                         if Detection.is_type(event.type):
                             print("wake word detected", flush=True)
+                            audio_start = AudioStart(rate=16000, width=2, channels=1)
+                            audio.clear()
                         elif AudioStart.is_type(event.type):
                             audio_start = AudioStart.from_event(event)
                             audio.clear()
