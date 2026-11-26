@@ -10,8 +10,8 @@ let
     ];
     text = ''
       current_time="$(date +%H%M)"
-      if (( 10#$current_time >= 830 )); then
-        echo "The night sleep window has ended; keeping the server awake"
+      if (( 10#$current_time >= 830 && 10#$current_time < 2305 )); then
+        echo "The night sleep window has not started yet; keeping the server awake"
         exit 0
       fi
 
@@ -73,6 +73,7 @@ in
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = [
+        "*-*-* 23:05,23:10,23:15,23:20,23:25,23:30,23:35,23:40,23:45,23:50,23:55:00"
         "*-*-* 00..07:00/5:00"
         "*-*-* 08:00,05,10,15,20:00"
       ];
