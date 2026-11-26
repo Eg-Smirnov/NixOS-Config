@@ -59,6 +59,26 @@ let
         )
 
 
+    async def process_audio(audio_start, audio):
+        sample = pathlib.Path("/run/server-voice/command.wav")
+        with wave.open(str(sample), "wb") as wav:
+            wav.setnchannels(audio_start.channels)
+            wav.setsampwidth(audio_start.width)
+            wav.setframerate(audio_start.rate)
+            wav.writeframes(audio)
+        segments, _ = model.transcribe(
+            str(sample), language="ru", vad_filter=True
+        )
+        transcript = " ".join(
+            segment.text.strip() for segment in segments
+        ).strip()
+        print(f"transcript: {transcript!r}", flush=True)
+        if transcript.lower() == "тон":
+            subprocess.run(["${playTone}"], check=True)
+        else:
+            speak("Я услышал: " + (transcript or "тишину"))
+
+
     async def main():
         while True:
             try:
@@ -88,32 +108,16 @@ let
                             audio.extend(AudioChunk.from_event(event).audio)
                             if len(audio) % 16384 == 0:
                                 print(f"audio bytes: {len(audio)}", flush=True)
-                        elif (
-                            AudioStop.is_type(event.type)
-                            or (
+                            if (
                                 audio_start is not None
                                 and len(audio)
                                 >= audio_start.rate * audio_start.width
                                 * audio_start.channels * 5
-                            )
-                        ) and audio_start is not None:
-                            sample = pathlib.Path("/run/server-voice/command.wav")
-                            with wave.open(str(sample), "wb") as wav:
-                                wav.setnchannels(audio_start.channels)
-                                wav.setsampwidth(audio_start.width)
-                                wav.setframerate(audio_start.rate)
-                                wav.writeframes(audio)
-                            segments, _ = model.transcribe(
-                                str(sample), language="ru", vad_filter=True
-                            )
-                            transcript = " ".join(
-                                segment.text.strip() for segment in segments
-                            ).strip()
-                            print(f"transcript: {transcript!r}", flush=True)
-                            if transcript.lower() == "тон":
-                                subprocess.run(["${playTone}"], check=True)
-                            else:
-                                speak("Я услышал: " + (transcript or "тишину"))
+                            ):
+                                await process_audio(audio_start, audio)
+                                break
+                        elif AudioStop.is_type(event.type) and audio_start is not None:
+                            await process_audio(audio_start, audio)
                             break
             except Exception as error:
                 print(f"voice event handler disconnected: {error}", flush=True)
