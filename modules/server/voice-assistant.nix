@@ -165,6 +165,8 @@ in
       default = "/var/lib/server-voice/models/whisper-base";
       description = "Path to the local faster-whisper model directory.";
     };
+
+    lva.enable = lib.mkEnableOption "Linux Voice Assistant Home Assistant satellite";
   };
 
   config = lib.mkIf cfg.enable {
@@ -177,8 +179,9 @@ in
 
     users.users.server-voice = {
       isSystemUser = true;
+      uid = 995;
       group = "server-voice";
-      extraGroups = [ "audio" ];
+      extraGroups = [ "audio" "pipewire" ];
       description = "Least-privilege voice assistant service user";
     };
     users.groups.server-voice = { };
@@ -196,6 +199,48 @@ in
       "d /var/lib/server-voice 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/models 0750 server-voice server-voice - -"
     ];
+
+    services.pipewire = lib.mkIf cfg.lva.enable {
+      enable = true;
+      systemWide = true;
+      alsa.enable = true;
+      pulse.enable = true;
+    };
+
+    virtualisation.docker.enable = lib.mkIf cfg.lva.enable true;
+    virtualisation.oci-containers.backend = "docker";
+    virtualisation.oci-containers.containers.linux-voice-assistant = lib.mkIf cfg.lva.enable {
+      image = "ghcr.io/ohf-voice/linux-voice-assistant:latest";
+      autoStart = true;
+      extraOptions = [ "--network=host" "--group-add=audio" "--group-add=pipewire" ];
+      environment = {
+        XDG_RUNTIME_DIR = "/run";
+        PULSE_SERVER = "/run/pulse/native";
+        PULSE_COOKIE = "/run/pulse/cookie";
+        CLIENT_NAME = "home-server";
+        ENABLE_ENCRYPTION = "1";
+        AUDIO_INPUT_DEVICE = "default";
+        AUDIO_OUTPUT_DEVICE = "pulse";
+        MUSIC_OUTPUT_DEVICE = "pulse";
+        MIC_AUTO_GAIN = "1";
+        MIC_NOISE_SUPPRESSION = "2";
+      };
+      user = "995:995";
+      volumes = [
+        "/run/pipewire:/run/pipewire"
+        "/run/pulse:/run/pulse"
+        "linux-voice-assistant-config:/app/configuration"
+        "linux-voice-assistant-wakewords:/app/wakewords"
+        "linux-voice-assistant-sounds:/app/sounds/custom"
+        "/etc/localtime:/etc/localtime:ro"
+      ];
+      capabilities = { SYS_NICE = true; };
+    };
+
+    systemd.services."docker-linux-voice-assistant" = lib.mkIf cfg.lva.enable {
+      after = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
+      wants = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
+    };
 
     systemd.services.server-voice-tone = {
       description = "Generate the initial voice assistant test tone";
@@ -276,6 +321,10 @@ in
         RuntimeDirectory = "server-voice";
       };
     };
+
+    systemd.services.server-voice-openwakeword.enable = !cfg.lva.enable;
+    systemd.services.server-voice-satellite.enable = !cfg.lva.enable;
+    systemd.services.server-voice-event-handler.enable = !cfg.lva.enable;
 
     systemd.services.home-assistant = {
       wantedBy = [ "multi-user.target" ];

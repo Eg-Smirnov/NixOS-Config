@@ -34,5 +34,8 @@
     ../../modules/server/voice-assistant.nix
   ];
 
-  services.serverVoiceAssistant.enable = true;
+  services.serverVoiceAssistant = {
+    enable = true;
+    lva.enable = true;
+  };
 }
