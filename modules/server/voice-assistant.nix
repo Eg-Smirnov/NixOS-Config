@@ -202,6 +202,7 @@ in
       "Z /var/lib/server-voice/lva 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/wakewords 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/sounds 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/local 0750 server-voice server-voice - -"
     ];
 
     services.pipewire = lib.mkIf cfg.lva.enable {
@@ -242,6 +243,7 @@ in
         "/var/lib/server-voice/lva:/app/configuration"
         "/var/lib/server-voice/lva/wakewords:/app/wakewords"
         "/var/lib/server-voice/lva/sounds:/app/sounds/custom"
+        "/var/lib/server-voice/lva/local:/app/local"
         "/etc/localtime:/etc/localtime:ro"
       ];
       capabilities = { SYS_NICE = true; };
