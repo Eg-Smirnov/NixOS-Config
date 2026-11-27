@@ -284,7 +284,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.wyoming-faster-whisper}/bin/wyoming-faster-whisper --uri tcp://127.0.0.1:10300 --model ${cfg.whisperModel} --language ru";
+        ExecStart = "${pkgs.wyoming-faster-whisper}/bin/wyoming-faster-whisper --uri tcp://127.0.0.1:10300 --model ${cfg.whisperModel} --data-dir /var/lib/server-voice/models --language ru --local-files-only";
         Restart = "always";
         User = "server-voice";
         Group = "server-voice";
@@ -300,7 +300,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.wyoming-piper}/bin/wyoming-piper --uri tcp://127.0.0.1:10200 --voice ${cfg.piperModel}";
+        ExecStart = "${pkgs.wyoming-piper}/bin/wyoming-piper --uri tcp://127.0.0.1:10200 --voice ${cfg.piperModel} --data-dir /var/lib/server-voice/models";
         Restart = "always";
         User = "server-voice";
         Group = "server-voice";
