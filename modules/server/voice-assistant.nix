@@ -258,6 +258,10 @@ in
     systemd.services."docker-linux-voice-assistant" = lib.mkIf cfg.lva.enable {
       after = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
       wants = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
+      preStart = ''
+        ${pkgs.coreutils}/bin/chown -R server-voice:server-voice /var/lib/server-voice/lva/local
+        ${pkgs.coreutils}/bin/chmod -R u+rwX,go-rX /var/lib/server-voice/lva/local
+      '';
     };
 
     systemd.services.server-voice-tone = {
