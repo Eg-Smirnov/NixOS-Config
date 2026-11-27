@@ -206,6 +206,8 @@ in
       "d /var/lib/server-voice/lva/sounds 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/local 0750 server-voice server-voice - -"
       "Z /var/lib/server-voice/lva/local 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/local/external_wake_words 0750 server-voice server-voice - -"
+      "Z /var/lib/server-voice/lva/local/external_wake_words 0750 server-voice server-voice - -"
     ];
 
     services.pipewire = lib.mkIf cfg.lva.enable {
