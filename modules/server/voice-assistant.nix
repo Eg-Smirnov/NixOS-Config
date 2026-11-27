@@ -192,6 +192,8 @@ in
       piper-tts
       wyoming-openwakeword
       wyoming-satellite
+      wyoming-faster-whisper
+      wyoming-piper
       python313Packages.faster-whisper
     ];
 
@@ -274,6 +276,38 @@ in
         User = "server-voice";
         Group = "server-voice";
         StateDirectory = "server-voice";
+      };
+    };
+
+    systemd.services.server-voice-whisper = {
+      description = "Wyoming Faster Whisper STT";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.wyoming-faster-whisper}/bin/wyoming-faster-whisper --uri tcp://127.0.0.1:10300 --model ${cfg.whisperModel} --language ru";
+        Restart = "always";
+        User = "server-voice";
+        Group = "server-voice";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ReadOnlyPaths = [ cfg.whisperModel ];
+      };
+    };
+
+    systemd.services.server-voice-piper = {
+      description = "Wyoming Piper TTS";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.wyoming-piper}/bin/wyoming-piper --uri tcp://127.0.0.1:10200 --voice ${cfg.piperModel}";
+        Restart = "always";
+        User = "server-voice";
+        Group = "server-voice";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        ReadOnlyPaths = [ cfg.piperModel "${cfg.piperModel}.json" ];
       };
     };
 
