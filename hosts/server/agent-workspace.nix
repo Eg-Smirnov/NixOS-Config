@@ -19,7 +19,7 @@ in
     home = "/persist/home/agent";
     homeMode = "0700";
     createHome = true;
-    extraGroups = [ ];
+    extraGroups = [ "systemd-journal" ];
 
     packages = with pkgs; [
       codex
