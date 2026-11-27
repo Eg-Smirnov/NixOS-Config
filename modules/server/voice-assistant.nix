@@ -260,7 +260,7 @@ in
       wants = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
       preStart = ''
         ${pkgs.coreutils}/bin/chown -R server-voice:server-voice /var/lib/server-voice/lva/local
-        ${pkgs.coreutils}/bin/chmod -R u+rwX,go-rX /var/lib/server-voice/lva/local
+        ${pkgs.coreutils}/bin/chmod -R a+rwX /var/lib/server-voice/lva/local
       '';
     };
 
