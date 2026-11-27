@@ -201,6 +201,8 @@ in
       "d /var/lib/server-voice/lva 0750 server-voice server-voice - -"
       "Z /var/lib/server-voice/lva 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/wakewords 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/wakewords/downloaded 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/wakewords/custom 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/sounds 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/local 0750 server-voice server-voice - -"
     ];
@@ -241,7 +243,8 @@ in
         "/run/pipewire:/run/pipewire"
         "/run/pulse:/run/pulse"
         "/var/lib/server-voice/lva:/app/configuration"
-        "/var/lib/server-voice/lva/wakewords:/app/wakewords"
+        "/var/lib/server-voice/lva/wakewords/downloaded:/app/wakewords/downloaded"
+        "/var/lib/server-voice/lva/wakewords/custom:/app/wakewords/custom"
         "/var/lib/server-voice/lva/sounds:/app/sounds/custom"
         "/var/lib/server-voice/lva/local:/app/local"
         "/etc/localtime:/etc/localtime:ro"
