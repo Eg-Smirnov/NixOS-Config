@@ -198,6 +198,9 @@ in
     systemd.tmpfiles.rules = [
       "d /var/lib/server-voice 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/models 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/wakewords 0750 server-voice server-voice - -"
+      "d /var/lib/server-voice/lva/sounds 0750 server-voice server-voice - -"
     ];
 
     services.pipewire = lib.mkIf cfg.lva.enable {
@@ -216,7 +219,7 @@ in
       environment = {
         XDG_RUNTIME_DIR = "/run";
         PULSE_SERVER = "/run/pulse/native";
-        PULSE_COOKIE = "/run/pulse/cookie";
+        PULSE_COOKIE = "/app/configuration/pulse-cookie";
         CLIENT_NAME = "home-server";
         HOST = "127.0.0.1";
         PORT = "6053";
@@ -231,9 +234,9 @@ in
       volumes = [
         "/run/pipewire:/run/pipewire"
         "/run/pulse:/run/pulse"
-        "linux-voice-assistant-config:/app/configuration"
-        "linux-voice-assistant-wakewords:/app/wakewords"
-        "linux-voice-assistant-sounds:/app/sounds/custom"
+        "/var/lib/server-voice/lva:/app/configuration"
+        "/var/lib/server-voice/lva/wakewords:/app/wakewords"
+        "/var/lib/server-voice/lva/sounds:/app/sounds/custom"
         "/etc/localtime:/etc/localtime:ro"
       ];
       capabilities = { SYS_NICE = true; };
