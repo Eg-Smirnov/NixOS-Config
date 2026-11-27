@@ -199,6 +199,7 @@ in
       "d /var/lib/server-voice 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/models 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva 0750 server-voice server-voice - -"
+      "Z /var/lib/server-voice/lva 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/wakewords 0750 server-voice server-voice - -"
       "d /var/lib/server-voice/lva/sounds 0750 server-voice server-voice - -"
     ];
