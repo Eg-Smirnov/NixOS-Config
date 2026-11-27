@@ -216,7 +216,11 @@ in
     virtualisation.oci-containers.containers.linux-voice-assistant = lib.mkIf cfg.lva.enable {
       image = "ghcr.io/ohf-voice/linux-voice-assistant:latest";
       autoStart = true;
-      extraOptions = [ "--network=host" "--group-add=audio" "--group-add=pipewire" ];
+      extraOptions = [
+        "--network=host"
+        "--group-add=${toString config.users.groups.audio.gid}"
+        "--group-add=${toString config.users.groups.pipewire.gid}"
+      ];
       environment = {
         XDG_RUNTIME_DIR = "/run";
         PULSE_SERVER = "/run/pulse/native";
