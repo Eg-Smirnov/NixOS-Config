@@ -39,4 +39,5 @@
   ];
 
   networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall.interfaces.wlp1s0.allowedTCPPorts = [ 8123 ];
 }
