@@ -220,7 +220,7 @@ in
       environment = {
         XDG_RUNTIME_DIR = "/run";
         PULSE_SERVER = "/run/pulse/native";
-        PULSE_COOKIE = "/app/configuration/pulse-cookie";
+        PULSE_COOKIE = "DISABLED";
         CLIENT_NAME = "home-server";
         HOST = "127.0.0.1";
         PORT = "6053";
