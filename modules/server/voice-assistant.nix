@@ -259,8 +259,8 @@ in
       after = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
       wants = [ "docker.service" "pipewire.service" "pipewire-pulse.service" ];
       preStart = ''
-        ${pkgs.coreutils}/bin/chown -R server-voice:server-voice /var/lib/server-voice/lva/local
-        ${pkgs.coreutils}/bin/chmod -R a+rwX /var/lib/server-voice/lva/local
+        ${pkgs.coreutils}/bin/chown -R server-voice:server-voice /var/lib/server-voice/lva
+        ${pkgs.coreutils}/bin/chmod -R a+rwX /var/lib/server-voice/lva
       '';
     };
 
