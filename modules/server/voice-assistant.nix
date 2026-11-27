@@ -230,7 +230,7 @@ in
         HOST = "127.0.0.1";
         PORT = "6053";
         ENABLE_ENCRYPTION = "1";
-        AUDIO_INPUT_DEVICE = "0";
+        AUDIO_INPUT_DEVICE = "Ryzen HD Audio Controller Analog Stereo";
         AUDIO_OUTPUT_DEVICE = "pulse";
         MUSIC_OUTPUT_DEVICE = "pulse";
         MIC_AUTO_GAIN = "1";
