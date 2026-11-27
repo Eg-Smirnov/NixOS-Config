@@ -391,6 +391,7 @@ in
     services.home-assistant = {
       enable = true;
       openFirewall = false;
+      extraComponents = [ "wyoming" ];
       config = {
         homeassistant = {
           name = "server";
