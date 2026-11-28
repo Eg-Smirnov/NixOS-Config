@@ -289,10 +289,7 @@ in
         User = "server-voice";
         Group = "server-voice";
         NoNewPrivileges = true;
-        ProtectSystem = "full";
         ProtectHome = true;
-        ReadOnlyPaths = [ cfg.whisperModel ];
-        ReadWritePaths = [ "/var/lib/server-voice/models" ];
         RuntimeDirectory = "server-voice-whisper";
         Environment = "TMPDIR=/run/server-voice-whisper";
       };
