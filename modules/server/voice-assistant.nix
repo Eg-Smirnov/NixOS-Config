@@ -292,6 +292,7 @@ in
         ProtectSystem = "strict";
         ProtectHome = true;
         ReadOnlyPaths = [ cfg.whisperModel ];
+        ReadWritePaths = [ "/var/lib/server-voice/models" ];
         RuntimeDirectory = "server-voice-whisper";
         Environment = "TMPDIR=/run/server-voice-whisper";
       };
