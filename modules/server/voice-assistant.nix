@@ -396,7 +396,7 @@ in
       enable = true;
       openFirewall = false;
       extraComponents = [ "wyoming" ];
-      extraPackages = ps: [ ps.bleak-esphome ];
+      extraPackages = ps: [ ps.bleak-esphome ps.esphome-dashboard-api ];
       config = {
         homeassistant = {
           name = "server";
