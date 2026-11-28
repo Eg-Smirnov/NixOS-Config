@@ -291,7 +291,10 @@ in
         NoNewPrivileges = true;
         ProtectHome = true;
         RuntimeDirectory = "server-voice-whisper";
-        Environment = "TMPDIR=/run/server-voice-whisper";
+        Environment = [
+          "TMPDIR=/run/server-voice-whisper"
+          "HF_HUB_DISABLE_XET=1"
+        ];
       };
     };
 
