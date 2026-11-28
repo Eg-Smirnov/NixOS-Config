@@ -404,6 +404,54 @@ in
           unit_system = "metric";
         };
         default_config = { };
+        input_boolean.server_sleep_pending = {
+          name = "Server sleep confirmation pending";
+          initial = false;
+        };
+        timer.server_sleep_confirmation = {
+          duration = "00:01:00";
+        };
+        shell_command.server_manual_sleep =
+          "sudo /run/current-system/sw/bin/systemctl start server-manual-sleep.service";
+        script.server_request_sleep = {
+          alias = "Request server sleep";
+          sequence = [
+            { service = "input_boolean.turn_on"; target.entity_id = "input_boolean.server_sleep_pending"; }
+            { service = "timer.start"; target.entity_id = "timer.server_sleep_confirmation"; }
+          ];
+        };
+        script.server_confirm_sleep = {
+          alias = "Confirm server sleep";
+          sequence = [{
+            choose = [{
+              conditions = [{ condition = "state"; entity_id = "input_boolean.server_sleep_pending"; state = "on"; }];
+              sequence = [
+                { service = "input_boolean.turn_off"; target.entity_id = "input_boolean.server_sleep_pending"; }
+                { service = "timer.cancel"; target.entity_id = "timer.server_sleep_confirmation"; }
+                { service = "shell_command.server_manual_sleep"; }
+              ];
+            }];
+          }];
+        };
+        conversation.intents = {
+          ServerSleep = { sentences = [ "крепкий сон" ]; };
+          ConfirmServerSleep = { sentences = [ "да" ]; };
+        };
+        automation = [{
+          alias = "Expire server sleep confirmation";
+          trigger = [{ platform = "event"; event_type = "timer.finished"; event_data.entity_id = "timer.server_sleep_confirmation"; }];
+          action = [{ service = "input_boolean.turn_off"; target.entity_id = "input_boolean.server_sleep_pending"; }];
+        }];
+        intent_script = {
+          ServerSleep = {
+            speech.text = "Усыпить сервер?";
+            action = [{ service = "script.server_request_sleep"; }];
+          };
+          ConfirmServerSleep = {
+            speech.text = "Усыпляю сервер";
+            action = [{ service = "script.server_confirm_sleep"; }];
+          };
+        };
       };
     };
   };

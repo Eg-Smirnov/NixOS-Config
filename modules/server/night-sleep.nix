@@ -10,7 +10,7 @@ let
     ];
     text = ''
       current_time="$(date +%H%M)"
-      if (( 10#$current_time >= 830 && 10#$current_time < 2305 )); then
+      if [[ "''${MANUAL_SLEEP:-0}" != 1 ]] && (( 10#$current_time >= 830 && 10#$current_time < 2305 )); then
         echo "The night sleep window has not started yet; keeping the server awake"
         exit 0
       fi
@@ -57,6 +57,22 @@ in
     owner = "root";
     mode = "0400";
   };
+
+  systemd.services.server-manual-sleep = {
+    description = "Suspend the server after an explicit voice confirmation";
+    after = [ "jellyfin.service" ];
+    wants = [ "jellyfin.service" ];
+    serviceConfig = {
+      Type = "oneshot";
+      Environment = "MANUAL_SLEEP=1";
+      ExecStart = "${checkJellyfinAndSuspend}/bin/check-jellyfin-and-suspend";
+    };
+  };
+
+  security.sudo.extraRules = [{
+    users = [ "home-assistant" ];
+    commands = [{ command = "/run/current-system/sw/bin/systemctl start server-manual-sleep.service"; options = [ "NOPASSWD" ]; }];
+  }];
 
   systemd.services.night-sleep = {
     description = "Suspend the server at night when Jellyfin is idle";
