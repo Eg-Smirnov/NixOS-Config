@@ -292,6 +292,8 @@ in
         ProtectSystem = "strict";
         ProtectHome = true;
         ReadOnlyPaths = [ cfg.whisperModel ];
+        RuntimeDirectory = "server-voice-whisper";
+        Environment = "TMPDIR=/run/server-voice-whisper";
       };
     };
 
@@ -308,6 +310,8 @@ in
         ProtectSystem = "strict";
         ProtectHome = true;
         ReadOnlyPaths = [ cfg.piperModel "${cfg.piperModel}.json" ];
+        RuntimeDirectory = "server-voice-piper";
+        Environment = "TMPDIR=/run/server-voice-piper";
       };
     };
 
