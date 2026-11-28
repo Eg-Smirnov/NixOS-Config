@@ -284,7 +284,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.wyoming-faster-whisper}/bin/wyoming-faster-whisper --uri tcp://127.0.0.1:10300 --model ${cfg.whisperModel} --data-dir /var/lib/server-voice/models --language ru --local-files-only";
+        ExecStart = "${pkgs.wyoming-faster-whisper}/bin/wyoming-faster-whisper --uri tcp://127.0.0.1:10300 --model small --data-dir /var/lib/server-voice/models --download-dir /var/lib/server-voice/models --language ru";
         Restart = "always";
         User = "server-voice";
         Group = "server-voice";
