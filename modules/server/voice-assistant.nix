@@ -434,8 +434,8 @@ in
           }];
         };
         conversation.intents = {
-          ServerSleep = { sentences = [ "крепкий сон" ]; };
-          ConfirmServerSleep = { sentences = [ "да" ]; };
+          ServerSleep = [ "крепкий сон" ];
+          ConfirmServerSleep = [ "да" ];
         };
         automation = [{
           alias = "Expire server sleep confirmation";
